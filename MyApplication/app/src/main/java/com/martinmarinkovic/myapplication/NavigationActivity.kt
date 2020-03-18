@@ -15,6 +15,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_navigation.*
 
 class NavigationActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener{
@@ -63,7 +64,8 @@ class NavigationActivity : AppCompatActivity(), NavigationView.OnNavigationItemS
 
             }
             R.id.nav_user_settings -> {
-
+                FirebaseAuth.getInstance().signOut()
+                finish()
             }
             R.id.nav_developer_page -> {
                 startActivity(Intent(Intent.ACTION_VIEW,

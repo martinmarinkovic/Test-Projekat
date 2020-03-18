@@ -22,6 +22,10 @@ class SignInActivity : AppCompatActivity() {
             startActivity(Intent(this, SignUpActivity::class.java))
         }
 
+        btn_reset_password.setOnClickListener{
+            startActivity(Intent(this, ResetPasswordActivity::class.java))
+        }
+
         btn_log_in.setOnClickListener {
             doLogin()
         }

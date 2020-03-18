@@ -1,4 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="welcome">Herzlich willkommen</string>
     <string name="app_name">My Application</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -24,7 +26,6 @@
     <string name="username">Username</string>
     <string name="title_activity_navigtion">NavigtionActivity</string>
     <string name="title_activity_navigation">NavigationActivity</string>
-    <string name="welcome">Welcome</string>
     <string name="registered">Start the App</string>
     <string name="not_registered">Sign in</string>
     <string name="report_mail">martin.marinkovic3@gmail.com</string>

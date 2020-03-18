@@ -7,6 +7,8 @@ import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_sign_in.*
 import kotlinx.android.synthetic.main.activity_sign_in.btn_sign_up
 import kotlinx.android.synthetic.main.activity_sign_in.tv_password
@@ -16,7 +18,7 @@ import kotlinx.android.synthetic.main.activity_sign_up.*
 class SignUpActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
-    //private val db = Firebase.firestore
+    private val db = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,28 +63,24 @@ class SignUpActivity : AppCompatActivity() {
                         ?.addOnCompleteListener { task ->
                             if (task.isSuccessful) {
 
-                                // Create a new user with a first and last name
-                             /*   val user = hashMapOf(
-                                    "username" to tv_username.text,
-                                    "email" to tv_email.text
-                                )
-
-                                db.collection("users")
-                                    .add(user)
-                                    .addOnSuccessListener { documentReference ->
-                                    }
-                                    .addOnFailureListener { e ->
-                                    }*/
-
-                                startActivity(Intent(this, SignInActivity::class.java))
-                                finish()
+                                val uid = FirebaseAuth.getInstance().currentUser?.uid
+                                val username = tv_username.text.toString()
+                                if (uid != null) {
+                                    val user = User(uid, username)
+                                    db.collection("users").document(uid)
+                                        .set(user)
+                                        .addOnSuccessListener { documentReference ->
+                                            startActivity(Intent(this, SignInActivity::class.java))
+                                            finish()
+                                        }
+                                        .addOnFailureListener { e ->
+                                            Toast.makeText(baseContext, "Adding user to db failed!", Toast.LENGTH_SHORT).show()
+                                        }
+                                }
                             }
                         }
                 } else {
-                    Toast.makeText(
-                        baseContext, "Sign Up failed. Try again after some time.",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText(baseContext, "Sign Up failed. Try again after some time.", Toast.LENGTH_SHORT).show()
                 }
             }
     }
