@@ -5,23 +5,26 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.FragmentTransitionImpl
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
+import androidx.navigation.ui.*
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_navigation.*
+import kotlinx.android.synthetic.main.app_bar_navigation.*
+import kotlinx.android.synthetic.main.app_bar_navigation.view.*
+import java.util.*
 
-class NavigationActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener{
+class NavigationActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelectedListener{
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private val GALLERY_PICK = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,12 +38,13 @@ class NavigationActivity : AppCompatActivity(), NavigationView.OnNavigationItemS
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_notes, R.id.nav_wallpaper, R.id.nav_lock_screen, R.id.nav_user_settings, R.id.nav_developer_page, R.id.nav_bug_report
+                R.id.nav_notes, R.id.nav_wallpaper, R.id.nav_lock_screen, R.id.nav_user_settings, R.id.nav_developer_page, R.id.nav_bug_report
             ), drawerLayout
         )
+
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-        drawer_layout.openDrawer(GravityCompat.START)
+
         navView.setNavigationItemSelectedListener(this)
     }
 
@@ -49,19 +53,16 @@ class NavigationActivity : AppCompatActivity(), NavigationView.OnNavigationItemS
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+   override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_notes -> {
-
+                findNavController(R.id.nav_host_fragment).navigate(R.id.nav_notes)
             }
             R.id.nav_wallpaper -> {
-                val galleryIntent = Intent()
-                galleryIntent.type = "image/*"
-                galleryIntent.action = Intent.ACTION_GET_CONTENT
-                startActivityForResult(Intent.createChooser(galleryIntent, "SELECT IMAGE"), GALLERY_PICK)
+                findNavController(R.id.nav_host_fragment).navigate(R.id.nav_wallpaper)
             }
             R.id.nav_lock_screen -> {
-
+                findNavController(R.id.nav_host_fragment).navigate(R.id.nav_lock_screen)
             }
             R.id.nav_user_settings -> {
                 FirebaseAuth.getInstance().signOut()
@@ -79,9 +80,5 @@ class NavigationActivity : AppCompatActivity(), NavigationView.OnNavigationItemS
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
     }
 }

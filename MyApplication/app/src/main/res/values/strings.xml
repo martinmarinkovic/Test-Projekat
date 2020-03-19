@@ -33,4 +33,9 @@
     <string name="btn_back"><![CDATA[<< Back]]></string>
     <string name="hint_email">Email</string>
     <string name="btn_forgot_password">Forgot your password?</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="open">open</string>
+    <string name="close">close</string>
 </resources>
