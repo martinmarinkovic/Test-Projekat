@@ -17,13 +17,12 @@ import com.martinmarinkovic.myapplication.roomdb.NoteDatabase
 import kotlinx.android.synthetic.main.fragment_add_note.*
 import kotlinx.coroutines.launch
 
-
 class AddNoteFragment : BaseFragment() {
 
     private var note: Note? = null
     private lateinit var auth: FirebaseAuth
     private val db = Firebase.firestore
-    var ref = db.collection("users")
+    private var ref = db.collection("users")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,23 +51,22 @@ class AddNoteFragment : BaseFragment() {
 
         // Primam argumant koj je prosledjen iz HomeFragmenta
         arguments?.let {
+            // PROVERITI IZ KOG FRAGMENTA PRIMAMO NOTE!!!!!!!!!!!!!!!!!!!!!!!!!
             note = AddNoteFragmentArgs.fromBundle(it).note
             edit_text_title.setText(note?.title)
             edit_text_note.setText(note?.note)
-            var image = AddNoteFragmentArgs.fromBundle(it).image
-            if (image != null) {
-                var fileUri = Uri.parse(image)
 
+            if (note?.image != null)
                 Glide.with(activity!!)
-                    .load(fileUri)
+                    .load(Uri.parse(note?.image))
                     .into(image_view);
-            }
         }
 
         button_save.setOnClickListener { view ->
 
             val noteTitle = edit_text_title.text.toString().trim()
             val noteBody = edit_text_note.text.toString().trim()
+            val image = note?.image
 
             if (noteTitle.isEmpty()) {
                 edit_text_title.error = "title required"
@@ -86,8 +84,10 @@ class AddNoteFragment : BaseFragment() {
             launch {
 
                 context?.let {
-                    val mNote = Note(noteTitle, noteBody)
+                    it.toast("Coroutine scope image: " + image)
+                    val mNote = Note(noteTitle, noteBody, image)
 
+                    // Ovde nastaje problem, jer se sad svaki put kada u novu belesku dodam sliku ne dodaje u bazu, samo update zbog uslova!
                     if (note == null) {
                         NoteDatabase(it).getNoteDao().addNote(mNote)
                         it.toast("Note Saved")
@@ -140,8 +140,18 @@ class AddNoteFragment : BaseFragment() {
     }
 
     private fun showPopUp() {
-        //val action = AddNoteFragmentDirections.actionOpenPopUp()
-        Navigation.findNavController(view!!).navigate(R.id.popUpFragment)
+
+        if(note == null) {
+            val noteTitle = edit_text_title.text.toString().trim()
+            val noteBody = edit_text_note.text.toString().trim()
+            val image = note?.image
+
+            note = Note(noteTitle, noteBody, image)
+        }
+
+        val action = AddNoteFragmentDirections.actionOpenPopUp()
+        action.note = note
+        Navigation.findNavController(view!!).navigate(action)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -163,10 +173,10 @@ class AddNoteFragment : BaseFragment() {
         if (uid != null) {
             var ref = db.collection("users").document(uid)
             ref.get().addOnSuccessListener { documentSnapshot ->
-                val user = documentSnapshot.toObject<User>()
+                //val user = documentSnapshot.toObject<User>()
 
                 var note = Note("test", "proba")
-                db.collection("users").document(uid).collection("notes").document()   //note id?????
+                db.collection("users").document(uid).collection("notes").document()   //note id neki da se kreira?????
                     .set(note)
                     .addOnSuccessListener { documentReference ->
                         Toast.makeText(activity, "Success!", Toast.LENGTH_SHORT).show()

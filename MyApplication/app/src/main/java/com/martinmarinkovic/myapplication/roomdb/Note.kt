@@ -8,9 +8,9 @@ import java.io.Serializable
 data class Note(
     // columns
     val title: String,
-    val note: String
+    val note: String,
     //val images: Array<String>? = null
-    //val image: String? = null
+    var image: String? = null
 
 ): Serializable {
     @PrimaryKey(autoGenerate = true)

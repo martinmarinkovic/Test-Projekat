@@ -11,68 +11,78 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.Navigation
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import com.martinmarinkovic.myapplication.roomdb.Note
 import com.theartofdev.edmodo.cropper.CropImage
-
+import kotlinx.android.synthetic.main.fragment_add_note.*
 
 class PopUpFragment : DialogFragment() {
 
+    private var note: Note? = null
+    private var storage = Firebase.storage
+    val RESULT_LOAD_IMG: Int = 1
     val TAKE_PHOTO_REQUEST: Int = 2
     val PICK_PHOTO_REQUEST: Int = 1
     var fileUri: Uri? = null
+    var test: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        arguments?.let {
+            //Ideja: Prosledjujem note iz AddNoteFragment zatim dodajem sliku i vracam taj note u AddNoteFragment?
+            note = PopUpFragmentArgs.fromBundle(it).note
+            activity?.toast("UCIATAOOOO NOTEEEE" + note?.title)
+        }
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var rootView: View = inflater.inflate(R.layout.fragment_pop_up, container, false)
 
+        var storageRef = storage.reference
+        var imagesRef = storageRef.child("images")
+
         var btnGallery = rootView.findViewById<LinearLayout>(R.id.btn_gallery)
         var btnCamera = rootView.findViewById<LinearLayout>(R.id.btn_camera)
         var btnAudio = rootView.findViewById<LinearLayout>(R.id.btn_audio)
 
-        btnGallery.setOnClickListener(object: View.OnClickListener
-        {
-            override fun onClick(v: View?) {
-                pickPhotoFromGallery()
-            }
-        }
-    )
+        btnGallery.setOnClickListener {
+            pickPhotoFromGallery() }
 
-        btnCamera.setOnClickListener{
+        btnCamera.setOnClickListener {
             askCameraPermission()
         }
 
-        btnAudio.setOnClickListener{
-
+        btnAudio.setOnClickListener {
+            val action = PopUpFragmentDirections.openAudioRecorder()
+            action.note = note
+            var navController = Navigation.findNavController(parentFragment!!.view!!)
+            navController.navigate(action)
         }
 
         return rootView
     }
 
-    /*override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        btn_gallery.setOnClickListener{
-            pickPhotoFromGallery()
-        }
-
-        btn_camera.setOnClickListener{
-            askCameraPermission()
-        }
-
-        btn_audio.setOnClickListener{
-
-        }
-    }*/
+    private fun saveChanges() {
+        if (test != null) {
+            var action = PopUpFragmentDirections.actionAddFileToNote()
+            note?.image = test
+            action.note = note
+            var navController = Navigation.findNavController(parentFragment!!.view!!)
+            navController.navigate(action)
+        } else
+            activity!!.toast("Nece!!!!!!!!!!!!!!!!!!!!!!!!!!!1")
+    }
 
     private fun pickPhotoFromGallery() {
         val pickImageIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
@@ -110,18 +120,18 @@ class PopUpFragment : DialogFragment() {
                             .setMessage(
                                 "Please allow permissions to take photo with camera")
                             .setNegativeButton(
-                                android.R.string.cancel,
-                                { dialog, _ ->
-                                    dialog.dismiss()
-                                    token?.cancelPermissionRequest()
-                                })
-                            .setPositiveButton(android.R.string.ok,
-                                { dialog, _ ->
-                                    dialog.dismiss()
-                                    token?.continuePermissionRequest()
-                                })
-                            .setOnDismissListener({
-                                token?.cancelPermissionRequest() })
+                                android.R.string.cancel
+                            ) { dialog, _ ->
+                                dialog.dismiss()
+                                token?.cancelPermissionRequest()
+                            }
+                            .setPositiveButton(android.R.string.ok
+                            ) { dialog, _ ->
+                                dialog.dismiss()
+                                token?.continuePermissionRequest()
+                            }
+                            .setOnDismissListener {
+                                token?.cancelPermissionRequest() }
                             .show()
                     }
                 }
@@ -129,24 +139,27 @@ class PopUpFragment : DialogFragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
         if (resultCode == RESULT_OK && requestCode == TAKE_PHOTO_REQUEST) {
-            //imageView.setImageURI(fileUri)
-        } else if(resultCode == RESULT_OK && requestCode == PICK_PHOTO_REQUEST){
+
+            test = fileUri.toString()
+            saveChanges()
+        }
+        if(resultCode == RESULT_OK && requestCode == PICK_PHOTO_REQUEST){
+
             fileUri = data?.data
-            CropImage.activity(fileUri)
+
+            //Problem sa Crop!!!!
+
+            /*CropImage.activity(fileUri)
                 //.setMinCropWindowSize(500, 500)
                 .start(activity!!)
-        } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            val result = CropImage.getActivityResult(data)
-            Toast.makeText(activity, "UPAOOOO",Toast.LENGTH_SHORT).show()
-            if (resultCode == RESULT_OK) {
-                var resultUri = result.getUri();
+            var result = CropImage.getActivityResult(data)
+            var resultUri = result.getUri();*/
 
-                val action = PopUpFragmentDirections.actionAddFileToNote()
-                view?.let { Navigation.findNavController(it).navigate(action) }
-
-                Toast.makeText(activity, "UPAOOOO i doleeeee!!!!",Toast.LENGTH_SHORT).show()
-            }
+            test = fileUri.toString()
+            saveChanges()
 
         } else {
             super.onActivityResult(requestCode, resultCode, data)
