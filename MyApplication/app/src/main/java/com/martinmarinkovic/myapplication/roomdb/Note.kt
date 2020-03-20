@@ -9,6 +9,9 @@ data class Note(
     // columns
     val title: String,
     val note: String
+    //val images: Array<String>? = null
+    //val image: String? = null
+
 ): Serializable {
     @PrimaryKey(autoGenerate = true)
     var id : Int = 0

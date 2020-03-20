@@ -18,7 +18,7 @@
         android:tint="@android:color/white"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:clickable="true" android:id="@+id/button_add"/>
-
+        android:clickable="true"
+        android:id="@+id/button_add"/>
 
 </RelativeLayout>
