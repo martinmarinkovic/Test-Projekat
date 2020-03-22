@@ -1,26 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".WallpaperFragment"
-    android:orientation="horizontal">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="20dp">
 
     <Button
-        android:layout_centerInParent="true"
         android:layout_margin="20dp"
         android:id="@+id/btn_gallery"
         android:background="@drawable/ic_menu_camera"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <Button
-        android:layout_centerInParent="true"
-        android:layout_below="@+id/btn_gallery"
         android:layout_margin="20dp"
         android:id="@+id/btn_camera"
         android:background="@drawable/ic_note"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+    <Button
+        android:layout_margin="20dp"
+        android:id="@+id/btn_recorder"
+        android:background="@drawable/ic_note"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
-</RelativeLayout>
+</LinearLayout>

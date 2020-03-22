@@ -10,8 +10,8 @@
 
     <item
         android:icon="@drawable/ic_menu_camera"
-        android:title="Delete"
-        android:id="@+id/popup_menu_item"
+        android:title="Image"
+        android:id="@+id/add_image_menu_item"
         app:showAsAction="always"/>
 
 </menu>

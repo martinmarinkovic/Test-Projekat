@@ -23,59 +23,37 @@
         <action
             android:id="@+id/actionSaveNote"
             app:destination="@id/nav_notes" />
-        <action
-            android:id="@+id/actionOpenPopUp"
-            app:destination="@id/popUpFragment" />
         <argument
             app:argType="com.martinmarinkovic.myapplication.roomdb.Note"
             android:name="Note"
             app:nullable="true"
             android:defaultValue="@null" />
- <!--       <argument
-            android:name="Image"
-            app:argType="string"
-            app:nullable="true"
-            android:defaultValue="@null" />-->
+        <action
+            android:id="@+id/actionOpenNoteImages"
+            app:destination="@id/noteImagesFragment" />
     </fragment>
-    <dialog
-        android:id="@+id/popUpFragment"
-        android:name="com.martinmarinkovic.myapplication.PopUpFragment"
-        android:label="fragment_pop_up"
-        tools:layout="@layout/fragment_pop_up" >
-        <action
-            android:id="@+id/actionAddFileToNote"
-            app:destination="@id/addNoteFragment" />
-        <argument
-            app:argType="com.martinmarinkovic.myapplication.roomdb.Note"
-            android:name="Note"
-            app:nullable="true"
-            android:defaultValue="@null" />
-        <action
-            android:id="@+id/openAudioRecorder"
-            app:destination="@id/audioRecorderFragment" />
-    </dialog>
     <fragment
         android:id="@id/nav_wallpaper"
         android:name="com.martinmarinkovic.myapplication.WallpaperFragment"
         android:label="fragment_wallpaper"
-        tools:layout="@layout/fragment_wallpaper" />
+        tools:layout="@layout/fragment_wallpaper" >
+        <action
+            android:id="@+id/actionAddWallpaper"
+            app:destination="@id/addWallpaperFragment" />
+    </fragment>
     <fragment
         android:id="@id/nav_lock_screen"
         android:name="com.martinmarinkovic.myapplication.LockScreenFragment"
         android:label="fragment_lock_screen"
         tools:layout="@layout/fragment_lock_screen" />
     <fragment
-        android:id="@+id/audioRecorderFragment"
-        android:name="com.martinmarinkovic.myapplication.AudioRecorderFragment"
-        android:label="fragment_audio_recorder"
-        tools:layout="@layout/fragment_audio_recorder" >
-        <action
-            android:id="@+id/actionSaveAudioFile"
-            app:destination="@id/popUpFragment" />
-        <argument
-            app:argType="com.martinmarinkovic.myapplication.roomdb.Note"
-            android:name="Note"
-            app:nullable="true"
-            android:defaultValue="@null" />
-    </fragment>
+        android:id="@+id/noteImagesFragment"
+        android:name="com.martinmarinkovic.myapplication.NoteImagesFragment"
+        android:label="fragment_note_images"
+        tools:layout="@layout/fragment_note_images" />
+    <fragment
+        android:id="@+id/addWallpaperFragment"
+        android:name="com.martinmarinkovic.myapplication.AddWallpaperFragment"
+        android:label="fragment_add_wallpaper"
+        tools:layout="@layout/fragment_add_wallpaper" />
 </navigation>

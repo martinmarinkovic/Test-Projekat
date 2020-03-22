@@ -19,13 +19,4 @@ interface NoteDao {
 
     @Delete
     suspend fun deleteNote(note: Note)
-
-   /* @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun upsertByReplacement(image: List<Image>)
-
-    @Query("SELECT * FROM image")
-    fun getAll(): List<Image>
-
-    @Delete
-    fun delete(image: Image)*/
 }
