@@ -4,12 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    android:orientation="horizontal"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".LockScreenFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="lock" />
+    <Button
+        android:text="enable lock screen"
+        android:layout_centerInParent="true"
+        android:id="@+id/btn_enable_lock_screen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </Button>
+
+    <Button
+        android:text="set password"
+        android:layout_centerInParent="true"
+        android:layout_below="@+id/btn_enable_lock_screen"
+        android:id="@+id/btn_set_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </Button>
 
 </RelativeLayout>

@@ -55,5 +55,11 @@
         android:id="@+id/addWallpaperFragment"
         android:name="com.martinmarinkovic.myapplication.AddWallpaperFragment"
         android:label="fragment_add_wallpaper"
-        tools:layout="@layout/fragment_add_wallpaper" />
+        tools:layout="@layout/fragment_add_wallpaper" >
+        <argument
+            android:name="String"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+    </fragment>
 </navigation>

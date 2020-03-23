@@ -1,15 +1,20 @@
 package com.martinmarinkovic.myapplication
 
+import android.app.WallpaperManager
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
+import kotlinx.android.synthetic.main.fragment_add_wallpaper.*
 
-/**
- * A simple [Fragment] subclass.
- */
 class AddWallpaperFragment : Fragment() {
+
+    var bitmap: Bitmap? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -17,6 +22,33 @@ class AddWallpaperFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_add_wallpaper, container, false)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        arguments?.let {
+            val image = AddWallpaperFragmentArgs.fromBundle(it).string
+            val imageUri = Uri.parse(image)
+            Glide.with(activity!!)
+                .load(imageUri)
+                .into(image_view )
+            bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, imageUri)
+        }
+
+        btn_set_wallpaper.setOnClickListener{
+            var wallpaperManager: WallpaperManager = WallpaperManager.getInstance(activity)
+            wallpaperManager.setBitmap(bitmap)
+            activity?.toast("New wallpaper is set")
+        }
+
+        btn_stickers.setOnClickListener{
+
+        }
+
+        btn_cancel.setOnClickListener{
+
+        }
     }
 
 }

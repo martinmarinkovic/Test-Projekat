@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:icon="@drawable/ic_done"
+        android:title="Save"
+        android:id="@+id/save"
+        app:showAsAction="always"/>
+
+    <item
         android:icon="@drawable/ic_note"
         android:title="Delete"
         android:id="@+id/delete"

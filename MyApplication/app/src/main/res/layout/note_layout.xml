@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.cardview.widget.CardView
+    <!--<androidx.cardview.widget.CardView
         android:layout_margin="4dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content">-->
 
         <RelativeLayout
             android:padding="8dp"
@@ -31,8 +31,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
-        </RelativeLayout>
+            <ImageView
+                android:id="@+id/iv_image"
+                android:background="@drawable/ic_menu_camera"
+                android:layout_alignParentRight="true"
+                android:layout_width="100dp"
+                android:layout_height="100dp"/>
 
-    </androidx.cardview.widget.CardView>
+        </RelativeLayout>
 
 </LinearLayout>

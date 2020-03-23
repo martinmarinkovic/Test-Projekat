@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.martinmarinkovic.myapplication.roomdb.NoteDatabase
 import kotlinx.android.synthetic.main.fragment_notes.*
@@ -27,7 +28,7 @@ class NotesFragment : BaseFragment() {
 
         recycler_view_notes.setHasFixedSize(true)
         recycler_view_notes.layoutManager =
-            StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
+            LinearLayoutManager(activity)
 
         launch {
             context?.let{

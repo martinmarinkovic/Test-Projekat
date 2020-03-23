@@ -33,4 +33,6 @@
     <string name="btn_back"><![CDATA[<< Back]]></string>
     <string name="hint_email">Email</string>
     <string name="btn_forgot_password">Forgot your password?</string>
+    <string name="min_scale">1</string>
+    <string name="max_scale">10</string>
 </resources>

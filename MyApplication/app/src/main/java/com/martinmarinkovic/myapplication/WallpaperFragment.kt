@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.navigation.Navigation
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -104,14 +105,19 @@ class WallpaperFragment : Fragment() {
         if (resultCode == Activity.RESULT_OK && requestCode == PICK_PHOTO_REQUEST) {
             fileUri = data?.data
             CropImage.activity(fileUri)
-                .setMinCropWindowSize(500, 500)
-                .setAspectRatio(1,1)
+                .setMinCropWindowSize(500, 1000)
+                //.setAspectRatio(1,1)
                 .start(context!!,this)
         }
         if (requestCode === CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             var result = CropImage.getActivityResult(data)
             if (resultCode === Activity.RESULT_OK) {
                 val resultUri = result.uri
+
+                val action = WallpaperFragmentDirections.actionAddWallpaper()
+                action.string = resultUri.toString()
+                Navigation.findNavController(view!!).navigate(action)
+
             } else if (resultCode === CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 val error = result.error
                 Toast.makeText(activity, "Error:" + error.toString(), Toast.LENGTH_SHORT).show()

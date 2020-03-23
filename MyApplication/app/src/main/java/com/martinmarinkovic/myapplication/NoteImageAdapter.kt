@@ -2,6 +2,7 @@ package com.martinmarinkovic.myapplication
 
 import android.app.AlertDialog
 import android.content.Context
+import android.media.MediaPlayer
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,9 @@ import com.bumptech.glide.Glide
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_image.view.*
 import kotlinx.android.synthetic.main.note_image.view.*
+import kotlinx.android.synthetic.main.play_audio_layout.view.*
+
+private lateinit var mediaPlayer: MediaPlayer
 
 class NoteImageAdapter(private val c: Context, private val images: ArrayList<String>) :
     RecyclerView.Adapter<NoteImageAdapter.ColorViewHolder>() {
@@ -25,26 +29,53 @@ class NoteImageAdapter(private val c: Context, private val images: ArrayList<Str
     }
 
     override fun onBindViewHolder(holder: ColorViewHolder, position: Int) {
-        val path = images[position]
+        var path = images[position]
 
-        Glide.with(holder.iv.context)
-            .load(path)
-            //.override(250, 250)
-            //.centerCrop()
-            //.placeholder(R.drawable.ic_image_place_holder)
-            .into(holder.iv );
+        if (path.contains(".mp3")){
+            Glide.with(holder.iv.context)
+                .load(R.drawable.ic_music)
+                //.override(250, 250)
+                //.centerCrop()
+                //.placeholder(R.drawable.ic_image_place_holder)
+                .into(holder.iv );
 
-        holder.iv .setOnClickListener {
+            holder.iv .setOnClickListener {
 
-            val recorderDialogView = LayoutInflater.from(holder.iv.context).inflate(R.layout.fragment_image, null)
-            Picasso.get()
-                .load(path)
-                .into(recorderDialogView.image_view)
-            val recorderDialogViewBuilder = AlertDialog.Builder(holder.iv.context).setView(recorderDialogView)
-            val  recorderDialog = recorderDialogViewBuilder.show()
-            recorderDialogView.btn_close.setOnClickListener{
-                recorderDialog.dismiss()
+                val recorderDialogView = LayoutInflater.from(holder.iv.context).inflate(R.layout.play_audio_layout, null)
+                val recorderDialogViewBuilder = AlertDialog.Builder(holder.iv.context).setView(recorderDialogView)
+                val  recorderDialog = recorderDialogViewBuilder.show()
+                recorderDialogView.btn_play.setOnClickListener{
+                    mediaPlayer = MediaPlayer()
+                    mediaPlayer.setDataSource(path)
+                    mediaPlayer.prepare()
+                    mediaPlayer.start()
+                }
+                recorderDialogView.btn_save.setOnClickListener{
+
+                }
             }
+        }
+        else{
+            Glide.with(holder.iv.context)
+                .load(path)
+                //.override(250, 250)
+                //.centerCrop()
+                //.placeholder(R.drawable.ic_image_place_holder)
+                .into(holder.iv );
+
+            holder.iv .setOnClickListener {
+
+                val recorderDialogView = LayoutInflater.from(holder.iv.context).inflate(R.layout.fragment_image, null)
+                Picasso.get()
+                    .load(path)
+                    .into(recorderDialogView.image_view)
+                val recorderDialogViewBuilder = AlertDialog.Builder(holder.iv.context).setView(recorderDialogView)
+                val  recorderDialog = recorderDialogViewBuilder.show()
+                recorderDialogView.btn_close.setOnClickListener{
+                    recorderDialog.dismiss()
+                }
+            }
+
         }
     }
 

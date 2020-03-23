@@ -14,9 +14,9 @@ data class Note(
     // columns
     val title: String,
     val note: String,
-
-    val images: ArrayList<String>
-    //var image: String? = null
+    var firestoreId: String,
+    val images: ArrayList<String>,
+    val audioFiles: ArrayList<String>
 
 ): Serializable {
     @PrimaryKey(autoGenerate = true)

@@ -74,7 +74,9 @@ dependencies {
 
     implementation 'com.karumi:dexter:6.0.2'
 
-    api 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
+
+    implementation 'com.andrognito.pinlockview:pinlockview:2.1.0'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

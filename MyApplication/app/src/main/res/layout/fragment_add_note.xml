@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".AddNoteFragment">
+    tools:context=".AddNoteFragment"
+    android:weightSum="5"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_weight="4"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
     <EditText
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -24,27 +33,14 @@
         android:layout_height="match_parent"
         android:inputType="textMultiLine"/>
 
-    <ImageView
-        android:id="@+id/image_view"
-        android:layout_centerInParent="true"
-        android:layout_width="50dp"
-        android:layout_height="50dp">
-    </ImageView>
-
-    <Button
-        android:id="@+id/btn_start_audio_file"
-        android:text="play"
-        android:layout_centerInParent="true"
-        android:layout_below="@+id/image_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    </Button>
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_centerInParent="true"
-        android:layout_below="@+id/btn_start_audio_file">
+        android:layout_weight="1"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_centerInParent="true">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv"
@@ -57,14 +53,4 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:src="@drawable/ic_done"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:tint="@android:color/white"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:clickable="true"
-        android:id="@+id/button_save"/>
-
-</RelativeLayout>
+</LinearLayout>
