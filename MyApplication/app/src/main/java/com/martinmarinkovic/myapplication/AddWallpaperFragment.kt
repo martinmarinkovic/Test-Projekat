@@ -45,10 +45,6 @@ class AddWallpaperFragment : Fragment() {
         btn_stickers.setOnClickListener{
 
         }
-
-        btn_cancel.setOnClickListener{
-
-        }
     }
 
 }

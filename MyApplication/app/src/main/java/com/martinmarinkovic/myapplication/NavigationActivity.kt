@@ -65,8 +65,7 @@ class NavigationActivity : AppCompatActivity() , NavigationView.OnNavigationItem
                 findNavController(R.id.nav_host_fragment).navigate(R.id.nav_lock_screen)
             }
             R.id.nav_user_settings -> {
-                FirebaseAuth.getInstance().signOut()
-                finish()
+                findNavController(R.id.nav_host_fragment).navigate(R.id.nav_user_settings)
             }
             R.id.nav_developer_page -> {
                 startActivity(Intent(Intent.ACTION_VIEW,

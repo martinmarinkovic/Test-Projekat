@@ -33,7 +33,7 @@ class NoteImageAdapter(private val c: Context, private val images: ArrayList<Str
 
         if (path.contains(".mp3")){
             Glide.with(holder.iv.context)
-                .load(R.drawable.ic_music)
+                .load(R.drawable.note_layout_image)
                 //.override(250, 250)
                 //.centerCrop()
                 //.placeholder(R.drawable.ic_image_place_holder)
@@ -44,14 +44,12 @@ class NoteImageAdapter(private val c: Context, private val images: ArrayList<Str
                 val recorderDialogView = LayoutInflater.from(holder.iv.context).inflate(R.layout.play_audio_layout, null)
                 val recorderDialogViewBuilder = AlertDialog.Builder(holder.iv.context).setView(recorderDialogView)
                 val  recorderDialog = recorderDialogViewBuilder.show()
+                recorderDialog.getWindow().setLayout(400, 400);
                 recorderDialogView.btn_play.setOnClickListener{
                     mediaPlayer = MediaPlayer()
                     mediaPlayer.setDataSource(path)
                     mediaPlayer.prepare()
                     mediaPlayer.start()
-                }
-                recorderDialogView.btn_save.setOnClickListener{
-
                 }
             }
         }

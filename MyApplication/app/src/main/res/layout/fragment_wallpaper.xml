@@ -5,22 +5,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".WallpaperFragment"
+    android:background="@drawable/background"
     android:orientation="horizontal">
 
-    <Button
+    <LinearLayout
+        android:background="@drawable/rounded_button"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
         android:layout_centerInParent="true"
-        android:layout_margin="20dp"
-        android:id="@+id/btn_gallery"
-        android:background="@drawable/ic_menu_camera"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <Button
-        android:layout_centerInParent="true"
-        android:layout_below="@+id/btn_gallery"
-        android:layout_margin="20dp"
-        android:id="@+id/btn_camera"
-        android:background="@drawable/ic_note"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content">
+
+        <Button
+            android:layout_margin="20dp"
+            android:id="@+id/btn_camera"
+            android:background="@drawable/ic_photo_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:layout_margin="20dp"
+            android:id="@+id/btn_gallery"
+            android:background="@drawable/ic_gallery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
 
 </RelativeLayout>

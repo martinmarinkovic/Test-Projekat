@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddWallpaperFragment">
+    tools:context=".AddWallpaperFragment"
+    android:background="@drawable/background">
 
     <ImageView
         android:id="@+id/image_view"
@@ -12,31 +13,43 @@
         android:layout_height="match_parent"
         android:text="@string/hello_blank_fragment" />
 
-    <Button
-        android:text="ADD"
-        android:layout_alignParentLeft="true"
+    <LinearLayout
         android:layout_alignParentBottom="true"
-        android:id="@+id/btn_set_wallpaper"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    </Button>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="2">
 
-    <Button
-        android:text="STICKERS"
-        android:layout_centerInParent="true"
-        android:layout_alignParentBottom="true"
-        android:id="@+id/btn_stickers"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    </Button>
+        <Button
+            android:layout_weight="1"
+            android:background="@drawable/rounded_button"
+            android:text="@string/set_wallpaper"
+            android:padding="20sp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/btn_set_wallpaper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </Button>
 
-    <Button
-        android:text="CANCEL"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:id="@+id/btn_cancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    </Button>
+        <Button
+            android:layout_weight="1"
+            android:background="@drawable/rounded_button"
+            android:text="@string/add_sticker"
+            android:padding="20sp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:layout_centerInParent="true"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/btn_stickers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </Button>
+    </LinearLayout>
 
 </RelativeLayout>

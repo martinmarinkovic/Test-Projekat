@@ -12,11 +12,12 @@ import java.lang.reflect.Type
 @Entity // db table
 data class Note(
     // columns
-    val title: String,
-    val note: String,
-    var firestoreId: String,
-    val images: ArrayList<String>,
-    val audioFiles: ArrayList<String>
+    val title: String? = null,
+    val note: String? = null,
+    var firestoreId: String? = null,
+    val images: ArrayList<String>? = null,
+    val audioFiles: ArrayList<String>? = null
+
 
 ): Serializable {
     @PrimaryKey(autoGenerate = true)

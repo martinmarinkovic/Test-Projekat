@@ -4,26 +4,47 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
-    android:orientation="horizontal"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/background"
+    android:padding="20sp"
     tools:context=".LockScreenFragment">
 
-    <Button
-        android:text="enable lock screen"
+    <LinearLayout
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
         android:layout_centerInParent="true"
-        android:id="@+id/btn_enable_lock_screen"
-        android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
-    </Button>
 
-    <Button
-        android:text="set password"
-        android:layout_centerInParent="true"
-        android:layout_below="@+id/btn_enable_lock_screen"
-        android:id="@+id/btn_set_password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    </Button>
+        <Button
+            android:layout_marginBottom="10sp"
+            android:background="@drawable/rounded_button"
+            android:text="@string/enable_lock_screen"
+            android:padding="20sp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:layout_centerInParent="true"
+            android:id="@+id/btn_enable_lock_screen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </Button>
+
+        <Button
+            android:background="@drawable/rounded_button"
+            android:text="@string/set_password"
+            android:padding="20sp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:layout_centerInParent="true"
+            android:layout_below="@+id/btn_enable_lock_screen"
+            android:id="@+id/btn_set_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </Button>
+    </LinearLayout>
 
 </RelativeLayout>

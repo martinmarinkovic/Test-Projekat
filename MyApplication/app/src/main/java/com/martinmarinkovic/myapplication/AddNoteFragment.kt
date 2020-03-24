@@ -19,7 +19,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.widget.doOnTextChanged
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.Glide
@@ -174,7 +173,7 @@ class AddNoteFragment : BaseFragment() {
     }
 
     private fun updateNote(note: Note){
-        db.collection("users").document(uid!!).collection("notes").document(note.firestoreId)
+        db.collection("users").document(uid!!).collection("notes").document(note.firestoreId!!)
             .set(note)
             .addOnSuccessListener { documentReference ->
                 Toast.makeText(activity, "Saved to Firestore", Toast.LENGTH_LONG).show()
@@ -190,7 +189,7 @@ class AddNoteFragment : BaseFragment() {
             ref.get().addOnSuccessListener { documentSnapshot ->
                 //val user = documentSnapshot.toObject<User>()
 
-                db.collection("users").document(uid!!).collection("notes").document(note.firestoreId)
+                db.collection("users").document(uid!!).collection("notes").document(note.firestoreId!!)
                     .set(note)
                     .addOnSuccessListener { documentReference ->
                         Toast.makeText(activity, "Success!", Toast.LENGTH_SHORT).show()
@@ -208,7 +207,7 @@ class AddNoteFragment : BaseFragment() {
             ref.get().addOnSuccessListener { documentSnapshot ->
                 //val user = documentSnapshot.toObject<User>()
 
-                db.collection("users").document(uid!!).collection("notes").document(note.firestoreId)
+                db.collection("users").document(uid!!).collection("notes").document(note.firestoreId!!)
                     .delete()
                     .addOnSuccessListener { documentReference ->
                         Toast.makeText(activity, "Success!", Toast.LENGTH_SHORT).show()
@@ -224,7 +223,7 @@ class AddNoteFragment : BaseFragment() {
         //val data = HashMap<String, Any>()
         //data["images"] = uri
 
-        db.collection("users").document(uid!!).collection("notes").document(note.firestoreId)
+        db.collection("users").document(uid!!).collection("notes").document(note.firestoreId!!)
             .set(note)
             .addOnSuccessListener { documentReference ->
                 Toast.makeText(activity, "Saved to Firestore", Toast.LENGTH_LONG).show()
@@ -240,7 +239,7 @@ class AddNoteFragment : BaseFragment() {
         for (img in list) {
             imgUri = Uri.parse(img)
             if (imgUri != null) {
-                val ref = storageReference?.child("images")?.child(uid!!)?.child(note.firestoreId)
+                val ref = storageReference?.child("images")?.child(uid!!)?.child(note.firestoreId!!)
                     ?.child(getRandomString() + ".jpg")
                 val uploadTask = ref?.putFile(imgUri!!)
 
@@ -429,7 +428,6 @@ class AddNoteFragment : BaseFragment() {
         val mDialogView = LayoutInflater.from(activity).inflate(R.layout.custom_dialog_layout, null)
         val mBuilder = AlertDialog.Builder(activity)
             .setView(mDialogView)
-            .setTitle("Select:")
         val  mAlertDialog = mBuilder.show()
         mDialogView.btn_camera.setOnClickListener {
             pickPhotoFromGallery()
@@ -470,6 +468,7 @@ class AddNoteFragment : BaseFragment() {
         val recorderDialogViewBuilder = AlertDialog.Builder(activity)
             .setView(recorderDialogView)
         val  recorderDialog = recorderDialogViewBuilder.show()
+        recorderDialog.getWindow().setLayout(300, 300);
         recorderDialogView.btn_stop_recording.setOnClickListener {
             stopRecording()
             recorderDialog.dismiss()

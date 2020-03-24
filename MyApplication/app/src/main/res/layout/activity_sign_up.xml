@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     tools:context=".SignUpActivity">
 
     <LinearLayout
@@ -14,11 +15,16 @@
         android:padding="16dp">
 
         <ImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:background="@drawable/icon_profile"
+            android:id="@+id/icon"
+            android:layout_margin="50sp"
+            android:layout_marginBottom="10dp"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             android:layout_gravity="center"/>
 
         <EditText
+            android:textColor="@color/white"
             android:id="@+id/tv_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -26,6 +32,7 @@
             android:inputType="textPersonName"/>
 
         <EditText
+            android:textColor="@color/white"
             android:id="@+id/tv_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -33,24 +40,25 @@
             android:inputType="textEmailAddress"/>
 
         <EditText
+            android:textColor="@color/white"
             android:id="@+id/tv_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/password"
             android:inputType="textPassword"/>
+
         <Button
             android:id="@+id/btn_sign_up"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryDark"
-            android:padding="16dp"
+            android:background="@drawable/rounded_button"
+            android:padding="20dp"
             android:text="@string/sign_up"
-            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textSize="20sp"
             android:layout_marginTop="10dp"
             android:textColor="@android:color/white"
-            android:textAllCaps="false"
-            />
+            android:textAllCaps="false" />
     </LinearLayout>
-
 
 </RelativeLayout>

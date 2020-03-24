@@ -4,25 +4,38 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:gravity="center"
-    android:padding="20dp">
+    android:background="@color/colorPrimaryDark"
+    android:gravity="center">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:layout_margin="20dp"
+            android:id="@+id/btn_gallery"
+            android:background="@drawable/ic_photo_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="">
+        </EditText>
+
+    </LinearLayout>
 
     <Button
         android:layout_margin="20dp"
-        android:id="@+id/btn_gallery"
-        android:background="@drawable/ic_menu_camera"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <Button
-        android:layout_margin="20dp"
         android:id="@+id/btn_camera"
-        android:background="@drawable/ic_note"
+        android:background="@drawable/ic_gallery"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <Button
         android:layout_margin="20dp"
         android:id="@+id/btn_recorder"
-        android:background="@drawable/ic_note"
+        android:background="@drawable/ic_audiotrack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

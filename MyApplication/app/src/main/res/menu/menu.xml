@@ -3,19 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:icon="@drawable/ic_done"
+        android:icon="@drawable/ic_save"
         android:title="Save"
         android:id="@+id/save"
         app:showAsAction="always"/>
 
     <item
-        android:icon="@drawable/ic_note"
+        android:icon="@drawable/ic_delete"
         android:title="Delete"
         android:id="@+id/delete"
         app:showAsAction="always"/>
 
     <item
-        android:icon="@drawable/ic_menu_camera"
+        android:icon="@drawable/ic_add_file"
         android:title="Image"
         android:id="@+id/add_image_menu_item"
         app:showAsAction="always"/>

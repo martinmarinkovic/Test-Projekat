@@ -40,7 +40,8 @@ class MainActivity : AppCompatActivity() {
                 ref.get().addOnSuccessListener { documentSnapshot ->
                 val user = documentSnapshot.toObject<User>()
                 if (user != null) {
-                    tv_welcome.setText(getString(R.string.welcome) + " " + user.username)
+                    tv_welcome.setText(getString(R.string.welcome))
+                    tv_username.setText(user.username)
                 }
             }
             btn_main.setText(R.string.registered)

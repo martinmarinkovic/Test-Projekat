@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_lock_screen.*
+import kotlinx.android.synthetic.main.set_pin_dialog_layout.*
 
 class LockScreenFragment : Fragment() {
 
@@ -25,8 +26,11 @@ class LockScreenFragment : Fragment() {
             val mDialogView = LayoutInflater.from(activity).inflate(R.layout.set_pin_dialog_layout, null)
             val mBuilder = AlertDialog.Builder(activity)
                 .setView(mDialogView)
-                .setTitle("Set pin:")
             val  mAlertDialog = mBuilder.show()
+            mAlertDialog.getWindow().setLayout(800, 800);
+            mDialogView.setOnClickListener{
+                mAlertDialog.dismiss()
+            }
         }
     }
 }

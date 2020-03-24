@@ -9,8 +9,8 @@
     <fragment
         android:id="@id/nav_notes"
         android:name="com.martinmarinkovic.myapplication.NotesFragment"
-        android:label="fragment_notes"
-        tools:layout="@layout/fragment_notes" >
+        android:label="Notes"
+        tools:layout="@layout/fragment_notes">
         <action
             android:id="@+id/actionAddNote"
             app:destination="@id/addNoteFragment" />
@@ -18,16 +18,16 @@
     <fragment
         android:id="@+id/addNoteFragment"
         android:name="com.martinmarinkovic.myapplication.AddNoteFragment"
-        android:label="fragment_add_note"
-        tools:layout="@layout/fragment_add_note" >
+        android:label="Add Note"
+        tools:layout="@layout/fragment_add_note">
         <action
             android:id="@+id/actionSaveNote"
             app:destination="@id/nav_notes" />
         <argument
-            app:argType="com.martinmarinkovic.myapplication.roomdb.Note"
             android:name="Note"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            android:defaultValue="@null"
+            app:argType="com.martinmarinkovic.myapplication.roomdb.Note"
+            app:nullable="true" />
         <action
             android:id="@+id/actionOpenNoteImages"
             app:destination="@id/noteImagesFragment" />
@@ -35,8 +35,8 @@
     <fragment
         android:id="@id/nav_wallpaper"
         android:name="com.martinmarinkovic.myapplication.WallpaperFragment"
-        android:label="fragment_wallpaper"
-        tools:layout="@layout/fragment_wallpaper" >
+        android:label="Wallpaper"
+        tools:layout="@layout/fragment_wallpaper">
         <action
             android:id="@+id/actionAddWallpaper"
             app:destination="@id/addWallpaperFragment" />
@@ -44,12 +44,11 @@
     <fragment
         android:id="@id/nav_lock_screen"
         android:name="com.martinmarinkovic.myapplication.LockScreenFragment"
-        android:label="fragment_lock_screen"
+        android:label="Lock Screen"
         tools:layout="@layout/fragment_lock_screen" />
     <fragment
         android:id="@+id/noteImagesFragment"
         android:name="com.martinmarinkovic.myapplication.NoteImagesFragment"
-        android:label="fragment_note_images"
         tools:layout="@layout/fragment_note_images" />
     <fragment
         android:id="@+id/addWallpaperFragment"
@@ -62,4 +61,9 @@
             app:nullable="true"
             android:defaultValue="@null"/>
     </fragment>
+    <fragment
+        android:id="@id/nav_user_settings"
+        android:name="com.martinmarinkovic.myapplication.UserSettingsFragment"
+        android:label="User Settings"
+        tools:layout="@layout/fragment_user_settings" />
 </navigation>

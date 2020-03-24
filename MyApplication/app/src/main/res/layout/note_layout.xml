@@ -3,41 +3,42 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <!--<androidx.cardview.widget.CardView
-        android:layout_margin="4dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">-->
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingLeft="10sp"
+    android:paddingRight="10sp"
+    android:paddingBottom="5sp"
+    android:paddingTop="5sp">
 
         <RelativeLayout
-            android:padding="8dp"
+            android:background="@drawable/rounded_button"
+            android:padding="10sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <TextView
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
-                tools:text="My First Note"
-                android:layout_marginBottom="10dp"
                 android:id="@+id/text_view_title"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:maxLength="10"
+                android:textStyle="bold"/>
 
             <TextView
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                tools:text="Note Description"
                 android:layout_below="@id/text_view_title"
+                android:layout_marginTop="10sp"
+                android:maxLength="20"
                 android:id="@+id/text_view_note"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:textStyle="bold"/>
 
             <ImageView
                 android:id="@+id/iv_image"
-                android:background="@drawable/ic_menu_camera"
+                android:background="@drawable/note_layout_image"
                 android:layout_alignParentRight="true"
-                android:layout_width="100dp"
-                android:layout_height="100dp"/>
-
+                android:layout_width="80dp"
+                android:layout_height="80dp"/>
         </RelativeLayout>
 
 </LinearLayout>
