@@ -44,6 +44,10 @@
     <string name="enable_lock_screen">Enable Lock Screen</string>
     <string name="set_password">Set Password</string>
     <string name="save">Save</string>
+    <string name="add_media">Add Media</string>
+    <string name="camera_photo">Camera Photo</string>
+    <string name="gallery_photo">Gallery Photo</string>
+    <string name="audio_recording">Audio Recording</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

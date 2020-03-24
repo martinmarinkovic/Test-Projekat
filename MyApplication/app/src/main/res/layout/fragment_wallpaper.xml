@@ -9,6 +9,7 @@
     android:orientation="horizontal">
 
     <LinearLayout
+        android:padding="20sp"
         android:background="@drawable/rounded_button"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"

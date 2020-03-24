@@ -34,8 +34,6 @@ class NoteImageAdapter(private val c: Context, private val images: ArrayList<Str
         if (path.contains(".mp3")){
             Glide.with(holder.iv.context)
                 .load(R.drawable.note_layout_image)
-                //.override(250, 250)
-                //.centerCrop()
                 //.placeholder(R.drawable.ic_image_place_holder)
                 .into(holder.iv );
 
@@ -52,33 +50,28 @@ class NoteImageAdapter(private val c: Context, private val images: ArrayList<Str
                     mediaPlayer.start()
                 }
             }
-        }
-        else{
+        } else {
             Glide.with(holder.iv.context)
                 .load(path)
-                //.override(250, 250)
-                //.centerCrop()
                 //.placeholder(R.drawable.ic_image_place_holder)
                 .into(holder.iv );
 
             holder.iv .setOnClickListener {
 
-                val recorderDialogView = LayoutInflater.from(holder.iv.context).inflate(R.layout.fragment_image, null)
+                val imageDialogView = LayoutInflater.from(holder.iv.context).inflate(R.layout.fragment_image, null)
                 Picasso.get()
                     .load(path)
-                    .into(recorderDialogView.image_view)
-                val recorderDialogViewBuilder = AlertDialog.Builder(holder.iv.context).setView(recorderDialogView)
-                val  recorderDialog = recorderDialogViewBuilder.show()
-                recorderDialogView.btn_close.setOnClickListener{
-                    recorderDialog.dismiss()
+                    .into(imageDialogView.image_view)
+                val imageDialogViewBuilder = AlertDialog.Builder(holder.iv.context).setView(imageDialogView)
+                val  imageDialog = imageDialogViewBuilder.show()
+                imageDialogView.btn_close.setOnClickListener{
+                    imageDialog.dismiss()
                 }
             }
-
         }
     }
 
     class ColorViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val iv  = view.iv  as ImageView
     }
-
 }

@@ -8,21 +8,14 @@ import com.google.gson.Gson
 import java.io.Serializable
 import java.lang.reflect.Type
 
-
-@Entity // db table
+@Entity
 data class Note(
-    // columns
+    @PrimaryKey var id : String = "",
     val title: String? = null,
     val note: String? = null,
-    var firestoreId: String? = null,
-    val images: ArrayList<String>? = null,
-    val audioFiles: ArrayList<String>? = null
-
-
-): Serializable {
-    @PrimaryKey(autoGenerate = true)
-    var id : Int? = null
-}
+    var images: ArrayList<String>? = null,
+    var audioFiles: ArrayList<String>? = null
+): Serializable
 
 class Converters {
     @TypeConverter

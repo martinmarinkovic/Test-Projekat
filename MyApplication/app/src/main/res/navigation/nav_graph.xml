@@ -28,9 +28,6 @@
             android:defaultValue="@null"
             app:argType="com.martinmarinkovic.myapplication.roomdb.Note"
             app:nullable="true" />
-        <action
-            android:id="@+id/actionOpenNoteImages"
-            app:destination="@id/noteImagesFragment" />
     </fragment>
     <fragment
         android:id="@id/nav_wallpaper"
@@ -46,10 +43,6 @@
         android:name="com.martinmarinkovic.myapplication.LockScreenFragment"
         android:label="Lock Screen"
         tools:layout="@layout/fragment_lock_screen" />
-    <fragment
-        android:id="@+id/noteImagesFragment"
-        android:name="com.martinmarinkovic.myapplication.NoteImagesFragment"
-        tools:layout="@layout/fragment_note_images" />
     <fragment
         android:id="@+id/addWallpaperFragment"
         android:name="com.martinmarinkovic.myapplication.AddWallpaperFragment"

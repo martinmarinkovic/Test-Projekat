@@ -52,9 +52,7 @@ class AddNoteFragment : BaseFragment() {
     private var storageReference: StorageReference? = null
     private var uid: String? = null
     private var note: Note? = null
-    private lateinit var auth: FirebaseAuth
     private val db = Firebase.firestore
-    private var ref = db.collection("users")
     private val TAKE_PHOTO_REQUEST: Int = 2
     private val PICK_PHOTO_REQUEST: Int = 1
     private var fileUri: Uri? = null
@@ -63,12 +61,10 @@ class AddNoteFragment : BaseFragment() {
     private var output: String? = null
     private var mediaRecorder: MediaRecorder? = null
     private var state: Boolean = false
-    private var recordingStopped: Boolean = false
-    private lateinit var mediaPlayer: MediaPlayer
     private val MAX_LENGTH = 10
     private var imageListToShow: ArrayList<String> = ArrayList()
     private var imageListToUpload: ArrayList<String> = ArrayList()
-    private var noteFirestoreId: String = ""
+    private var noteId: String = ""
     private var audioFilesList: ArrayList<String> = ArrayList()
     private var allFilesList: ArrayList<String> = ArrayList()
 
@@ -95,16 +91,12 @@ class AddNoteFragment : BaseFragment() {
 
         initMediaRecorder()
 
-        // Room db u Kotlinu ne moze da se izvrsava u main thread-u, zato koristimo AsyncTask (doInBackground)
-        // Kotlin sadrzi coroutines koje nam pomazu da pisemo ainshorne programe
-        // ispred svake funkcije (u NoteDao) pisemo suspend, tako da ona moze da se zove u okviru courutine scope-a
-
         arguments?.let {
             note = AddNoteFragmentArgs.fromBundle(it).note
             edit_text_title.setText(note?.title)
             edit_text_note.setText(note?.note)
-            if (note?.firestoreId != null)
-                noteFirestoreId = note?.firestoreId!!
+            if (note?.id != null)
+                noteId = note?.id!!
             if(note?.images != null) {
                 imageListToShow = note?.images!!
                 allFilesList.addAll(imageListToShow)
@@ -121,7 +113,6 @@ class AddNoteFragment : BaseFragment() {
     private fun save() {
         val noteTitle = edit_text_title.text.toString().trim()
         val noteBody = edit_text_note.text.toString().trim()
-        //image?.let { imageListToUpload!!.add(it) }
 
         if (noteTitle.isEmpty()) {
             edit_text_title.error = "title required"
@@ -138,25 +129,21 @@ class AddNoteFragment : BaseFragment() {
         launch {
 
             context?.let {
-                val mNote = Note(noteTitle, noteBody, noteFirestoreId, imageListToShow, audioFilesList)
+                val mNote = Note(noteId, noteTitle, noteBody, imageListToShow, audioFilesList)
 
                 if (note == null) {
-                    noteFirestoreId = getRandomString()
-                    mNote.firestoreId = noteFirestoreId
+                    noteId = getRandomString()
+                    mNote.id = noteId
                     NoteDatabase(it).getNoteDao().addNote(mNote)
                     saveNote(mNote)
                     if (imageListToUpload.isNotEmpty())
                         uploadImage(mNote)
-
-                    it.toast("Note Saved" + mNote.firestoreId)
                 } else {
-                    mNote.id = note!!.id
+                    //mNote.id = note!!.id
                     NoteDatabase(it).getNoteDao().updateNote(mNote)
                     updateNote(mNote)
                     if (imageListToUpload.isNotEmpty())
                         uploadImage(mNote)
-
-                    it.toast("Note Updated")
                 }
 
                 val action = AddNoteFragmentDirections.actionSaveNote()
@@ -172,26 +159,14 @@ class AddNoteFragment : BaseFragment() {
         rv.adapter = igka
     }
 
-    private fun updateNote(note: Note){
-        db.collection("users").document(uid!!).collection("notes").document(note.firestoreId!!)
-            .set(note)
-            .addOnSuccessListener { documentReference ->
-                Toast.makeText(activity, "Saved to Firestore", Toast.LENGTH_LONG).show()
-            }
-            .addOnFailureListener { e ->
-                Toast.makeText(activity, "Error saving to Firestore", Toast.LENGTH_LONG).show()
-            }
-    }
 
     private fun saveNote(note: Note) {
         if (uid != null) {
             var ref = db.collection("users").document(uid!!)
-            ref.get().addOnSuccessListener { documentSnapshot ->
-                //val user = documentSnapshot.toObject<User>()
-
-                db.collection("users").document(uid!!).collection("notes").document(note.firestoreId!!)
+            ref.get().addOnSuccessListener {
+                db.collection("users").document(uid!!).collection("notes").document(note.id!!)
                     .set(note)
-                    .addOnSuccessListener { documentReference ->
+                    .addOnSuccessListener {
                         Toast.makeText(activity, "Success!", Toast.LENGTH_SHORT).show()
                     }
                     .addOnFailureListener { e ->
@@ -204,12 +179,10 @@ class AddNoteFragment : BaseFragment() {
     private fun deleteNoteFirestore(note: Note) {
         if (uid != null) {
             var ref = db.collection("users").document(uid!!)
-            ref.get().addOnSuccessListener { documentSnapshot ->
-                //val user = documentSnapshot.toObject<User>()
-
-                db.collection("users").document(uid!!).collection("notes").document(note.firestoreId!!)
+            ref.get().addOnSuccessListener {
+                db.collection("users").document(uid!!).collection("notes").document(note.id!!)
                     .delete()
-                    .addOnSuccessListener { documentReference ->
+                    .addOnSuccessListener {
                         Toast.makeText(activity, "Success!", Toast.LENGTH_SHORT).show()
                     }
                     .addOnFailureListener { e ->
@@ -219,11 +192,13 @@ class AddNoteFragment : BaseFragment() {
         }
     }
 
-    private fun addUploadRecordToDb(uri: String, note: Note){
-        //val data = HashMap<String, Any>()
-        //data["images"] = uri
+    private fun updateNote(note: Note){
+        db.collection("users").document(uid!!).collection("notes").document(note.id!!)
+            .set(note)
+    }
 
-        db.collection("users").document(uid!!).collection("notes").document(note.firestoreId!!)
+    private fun addUploadRecordToDb(uri: String, note: Note){
+        db.collection("users").document(uid!!).collection("notes").document(note.id!!)
             .set(note)
             .addOnSuccessListener { documentReference ->
                 Toast.makeText(activity, "Saved to Firestore", Toast.LENGTH_LONG).show()
@@ -239,13 +214,11 @@ class AddNoteFragment : BaseFragment() {
         for (img in list) {
             imgUri = Uri.parse(img)
             if (imgUri != null) {
-                val ref = storageReference?.child("images")?.child(uid!!)?.child(note.firestoreId!!)
+                val ref = storageReference?.child("images")?.child(uid!!)?.child(note.id!!)
                     ?.child(getRandomString() + ".jpg")
                 val uploadTask = ref?.putFile(imgUri!!)
 
-                //UUID.randomUUID().toString() - random id
                 // After uploading a file, you can get a URL to download the file by calling the getDownloadUrl() method on the StorageReference:
-                // Continuation - function that is called to continue execution after completion of a Task.
 
                 val urlTask =
                     uploadTask?.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
@@ -270,25 +243,6 @@ class AddNoteFragment : BaseFragment() {
         }
     }
 
-    private fun getListOfNotes() : List<Note> {
-        val notes = ArrayList<Note>()
-        uid?.let {
-            ref.document(it)
-                .collection("notes")
-                .get().addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        for (document in task.result!!) {
-                            var note = document.toObject<Note>()
-                            //note.id = id.toInt()
-                            notes.add(note)
-                        }
-                        Toast.makeText(activity, notes.toString(), Toast.LENGTH_SHORT).show()
-                    }
-                }
-        }
-        return notes;
-    }
-
     private fun pickPhotoFromGallery() {
         val pickImageIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(pickImageIntent, PICK_PHOTO_REQUEST)
@@ -306,7 +260,7 @@ class AddNoteFragment : BaseFragment() {
         }
     }
 
-    fun askCameraPermission(){
+    private fun askCameraPermission(){
         Dexter.withActivity(activity).withPermissions(
             Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE
         ).withListener(object : MultiplePermissionsListener {
@@ -321,7 +275,8 @@ class AddNoteFragment : BaseFragment() {
                 permissions: MutableList<com.karumi.dexter.listener.PermissionRequest>?, token: PermissionToken?
             ) { context?.let {
                 AlertDialog.Builder(it)
-                    .setTitle("Permissions Error!").setMessage("Please allow permissions to take photo with camera")
+                    .setTitle("Permissions Error!")
+                    .setMessage("Please allow permissions to take photo with camera")
                     .setNegativeButton(android.R.string.cancel) { dialog, _ ->
                         dialog.dismiss()
                         token?.cancelPermissionRequest()
@@ -339,7 +294,6 @@ class AddNoteFragment : BaseFragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == RESULT_OK && requestCode == TAKE_PHOTO_REQUEST) {
-            // PROVERI OOV!?!!?!?!?!!?!
             image = fileUri.toString()
             CropImage.activity(fileUri)
                 .setMinCropWindowSize(500, 500)
@@ -363,10 +317,8 @@ class AddNoteFragment : BaseFragment() {
                 imageListToUpload.add(image!!)
                 allFilesList.add(image!!)
                 setImages(allFilesList)
-            } else if (resultCode === CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                val error = result.error
-                Toast.makeText(activity, "Error:" + error.toString(), Toast.LENGTH_SHORT).show()
-            }
+            } else if (resultCode === CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE)
+                Toast.makeText(activity, "Error:$result.error", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -424,7 +376,7 @@ class AddNoteFragment : BaseFragment() {
         }.create().show()
     }
 
-    private fun addImage() {
+    private fun addFile() {
         val mDialogView = LayoutInflater.from(activity).inflate(R.layout.custom_dialog_layout, null)
         val mBuilder = AlertDialog.Builder(activity)
             .setView(mDialogView)
@@ -447,7 +399,7 @@ class AddNoteFragment : BaseFragment() {
         when (item.itemId) {
             R.id.save -> save()
             R.id.delete -> if (note != null) deleteNote() else context?.toast("Cannot Delete")
-            R.id.add_image_menu_item -> addImage()
+            R.id.add_image_menu_item -> addFile()
         }
         return super.onOptionsItemSelected(item)
     }

@@ -1,17 +1,18 @@
-package com.martinmarinkovic.myapplication
+package com.martinmarinkovic.myapplication.loading
 
 import android.os.AsyncTask
 
-/*
+
 interface LoadingImplementation {
     fun onFinishedLoading()
 }
 
 class LoadingAsync(private val listener: LoadingImplementation) : AsyncTask<Void, Void, Void>() {
     override fun doInBackground(vararg params: Void?): Void? {
-        for (i in 0 until 10) {
+        for (i in 0 until 3) {
             Thread.sleep(1000)
         }
+        return null
     }
 
     override fun onPostExecute(result: Void?) {
@@ -19,4 +20,4 @@ class LoadingAsync(private val listener: LoadingImplementation) : AsyncTask<Void
 
         listener.onFinishedLoading()
     }
-}*/
+}

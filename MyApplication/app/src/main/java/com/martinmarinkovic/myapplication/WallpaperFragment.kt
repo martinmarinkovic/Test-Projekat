@@ -90,7 +90,7 @@ class WallpaperFragment : Fragment() {
                     }
                     .setOnDismissListener { token?.cancelPermissionRequest() }
                     .show()
-            }
+                }
             }
         }).check()
     }
@@ -99,14 +99,14 @@ class WallpaperFragment : Fragment() {
         if (resultCode == Activity.RESULT_OK && requestCode == TAKE_PHOTO_REQUEST) {
             CropImage.activity(fileUri)
                 .setMinCropWindowSize(500, 500)
-                .setAspectRatio(1,1)
+                .setAspectRatio(19,9)
                 .start(context!!,this)
         }
         if (resultCode == Activity.RESULT_OK && requestCode == PICK_PHOTO_REQUEST) {
             fileUri = data?.data
             CropImage.activity(fileUri)
                 .setMinCropWindowSize(500, 1000)
-                //.setAspectRatio(1,1)
+                .setAspectRatio(19,9)
                 .start(context!!,this)
         }
         if (requestCode === CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
@@ -118,10 +118,8 @@ class WallpaperFragment : Fragment() {
                 action.string = resultUri.toString()
                 Navigation.findNavController(view!!).navigate(action)
 
-            } else if (resultCode === CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                val error = result.error
-                Toast.makeText(activity, "Error:" + error.toString(), Toast.LENGTH_SHORT).show()
-            }
+            } else if (resultCode === CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE)
+                activity?.toast("Error:$result.error")
         }
     }
 }

@@ -16,10 +16,7 @@ import kotlinx.coroutines.launch
 
 class NotesFragment : BaseFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_notes, container, false)
     }
 
@@ -38,10 +35,8 @@ class NotesFragment : BaseFragment() {
         }
 
         button_add.setOnClickListener {
-
             val action = NotesFragmentDirections.actionAddNote()
             Navigation.findNavController(it).navigate(action)
-
         }
     }
 }

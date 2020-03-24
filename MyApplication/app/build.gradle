@@ -78,6 +78,8 @@ dependencies {
 
     implementation 'com.andrognito.pinlockview:pinlockview:2.1.0'
 
+    implementation 'com.airbnb.android:lottie:3.4.0'
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'

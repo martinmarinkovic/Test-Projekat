@@ -17,30 +17,19 @@ class ResetPasswordActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
 
         btn_reset_password.setOnClickListener{
-
             var user_email = email.text.toString().trim()
 
             if (!Patterns.EMAIL_ADDRESS.matcher(email.text.toString()).matches()) {
                 email.error = "Please enter valid email"
                 email.requestFocus()
             } else {
-
                 auth.sendPasswordResetEmail(user_email)
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
-                            Toast.makeText(
-                                this@ResetPasswordActivity,
-                                "We have sent you instructions to reset your password!",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            toast("We have sent you instructions to reset your password!")
                             finish()
-                        } else {
-                            Toast.makeText(
-                                baseContext,
-                                "Failed to send reset email!",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+                        } else
+                           toast("Failed to send reset email!")
                     }
             }
         }

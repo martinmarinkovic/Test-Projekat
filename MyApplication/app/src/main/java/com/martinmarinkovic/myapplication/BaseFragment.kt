@@ -9,12 +9,10 @@ import kotlin.coroutines.CoroutineContext
 
 abstract class BaseFragment : Fragment(), CoroutineScope {
 
-    // job is a background tast in corouine
     private lateinit var job: Job
 
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.Main
-    // Dispatchers defines our threads, where we want to execute the job
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -31,7 +31,7 @@
         <TextView
             android:textColor="@color/white"
             android:textStyle="bold"
-            android:textSize="20sp"
+            android:textSize="25sp"
             android:layout_gravity="center"
             android:text="@string/username"
             android:layout_below="@+id/profile_image"

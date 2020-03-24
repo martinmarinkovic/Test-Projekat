@@ -17,14 +17,19 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.*
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_navigation.*
 import kotlinx.android.synthetic.main.app_bar_navigation.*
 import kotlinx.android.synthetic.main.app_bar_navigation.view.*
+import kotlinx.android.synthetic.main.nav_header_navigation.*
 import java.util.*
 
 class NavigationActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelectedListener{
 
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private val db = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,8 +49,21 @@ class NavigationActivity : AppCompatActivity() , NavigationView.OnNavigationItem
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-
         navView.setNavigationItemSelectedListener(this)
+        setUsername()
+    }
+
+    private fun setUsername() {
+        val firebaseUser = FirebaseAuth.getInstance().currentUser
+        if (firebaseUser != null) {
+            var ref = db.collection("users").document(firebaseUser.uid)
+            ref.get().addOnSuccessListener { documentSnapshot ->
+                val user = documentSnapshot.toObject<User>()
+                if (user != null) {
+                    tv_username.text = user.username
+                }
+            }
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
