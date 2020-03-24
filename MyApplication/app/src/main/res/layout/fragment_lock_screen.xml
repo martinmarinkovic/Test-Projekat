@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background"
     android:padding="20sp"
-    tools:context=".LockScreenFragment">
+    tools:context=".lockscreen.LockScreenFragment">
 
     <LinearLayout
         android:layout_centerVertical="true"

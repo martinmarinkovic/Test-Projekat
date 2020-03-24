@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".TestLockScreenActivity">
+    tools:context=".lockscreen.TestLockScreenActivity">
 
     <ImageView
         android:id="@+id/profile_image"

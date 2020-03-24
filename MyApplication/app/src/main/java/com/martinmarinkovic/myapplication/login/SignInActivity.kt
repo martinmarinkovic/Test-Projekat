@@ -1,4 +1,4 @@
-package com.martinmarinkovic.myapplication
+package com.martinmarinkovic.myapplication.login
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -7,6 +7,8 @@ import android.util.Patterns
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.martinmarinkovic.myapplication.NavigationActivity
+import com.martinmarinkovic.myapplication.R
 import kotlinx.android.synthetic.main.activity_sign_in.*
 
 class SignInActivity : AppCompatActivity() {

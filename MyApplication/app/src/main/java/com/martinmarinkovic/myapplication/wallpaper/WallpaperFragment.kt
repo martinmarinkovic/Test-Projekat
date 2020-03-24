@@ -1,4 +1,4 @@
-package com.martinmarinkovic.myapplication
+package com.martinmarinkovic.myapplication.wallpaper
 
 import android.Manifest
 import android.app.Activity
@@ -13,16 +13,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.navigation.Navigation
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import com.martinmarinkovic.myapplication.R
+import com.martinmarinkovic.myapplication.helper.toast
 import com.theartofdev.edmodo.cropper.CropImage
-import kotlinx.android.synthetic.main.custom_dialog_layout.view.*
-import kotlinx.android.synthetic.main.custom_dialog_layout.view.btn_camera
 import kotlinx.android.synthetic.main.fragment_wallpaper.*
 
 class WallpaperFragment : Fragment() {
@@ -98,15 +97,15 @@ class WallpaperFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == TAKE_PHOTO_REQUEST) {
             CropImage.activity(fileUri)
-                .setMinCropWindowSize(500, 500)
-                .setAspectRatio(19,9)
+                .setMinCropWindowSize(500, 1000)
+                .setAspectRatio(9,19)
                 .start(context!!,this)
         }
         if (resultCode == Activity.RESULT_OK && requestCode == PICK_PHOTO_REQUEST) {
             fileUri = data?.data
             CropImage.activity(fileUri)
                 .setMinCropWindowSize(500, 1000)
-                .setAspectRatio(19,9)
+                .setAspectRatio(9,19)
                 .start(context!!,this)
         }
         if (requestCode === CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
@@ -114,7 +113,8 @@ class WallpaperFragment : Fragment() {
             if (resultCode === Activity.RESULT_OK) {
                 val resultUri = result.uri
 
-                val action = WallpaperFragmentDirections.actionAddWallpaper()
+                val action =
+                    WallpaperFragmentDirections.actionAddWallpaper()
                 action.string = resultUri.toString()
                 Navigation.findNavController(view!!).navigate(action)
 

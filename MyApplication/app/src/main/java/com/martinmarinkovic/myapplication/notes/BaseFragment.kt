@@ -1,4 +1,4 @@
-package com.martinmarinkovic.myapplication
+package com.martinmarinkovic.myapplication.notes
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

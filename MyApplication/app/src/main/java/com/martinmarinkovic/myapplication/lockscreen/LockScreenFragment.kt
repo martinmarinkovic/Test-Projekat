@@ -1,12 +1,12 @@
-package com.martinmarinkovic.myapplication
+package com.martinmarinkovic.myapplication.lockscreen
 
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import com.martinmarinkovic.myapplication.R
 import kotlinx.android.synthetic.main.fragment_lock_screen.*
-import kotlinx.android.synthetic.main.set_pin_dialog_layout.*
 
 class LockScreenFragment : Fragment() {
 

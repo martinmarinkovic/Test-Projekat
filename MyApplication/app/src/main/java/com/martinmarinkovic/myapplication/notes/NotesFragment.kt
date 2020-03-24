@@ -1,15 +1,12 @@
-package com.martinmarinkovic.myapplication
+package com.martinmarinkovic.myapplication.notes
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.martinmarinkovic.myapplication.R
 import com.martinmarinkovic.myapplication.roomdb.NoteDatabase
 import kotlinx.android.synthetic.main.fragment_notes.*
 import kotlinx.coroutines.launch
@@ -30,12 +27,14 @@ class NotesFragment : BaseFragment() {
         launch {
             context?.let{
                 val notes = NoteDatabase(it).getNoteDao().getAllNotes()
-                recycler_view_notes.adapter = NotesAdapter(notes)
+                recycler_view_notes.adapter =
+                    NotesAdapter(notes)
             }
         }
 
         button_add.setOnClickListener {
-            val action = NotesFragmentDirections.actionAddNote()
+            val action =
+                NotesFragmentDirections.actionAddNote()
             Navigation.findNavController(it).navigate(action)
         }
     }

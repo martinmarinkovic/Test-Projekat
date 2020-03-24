@@ -1,18 +1,13 @@
 package com.martinmarinkovic.myapplication
 
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.FragmentTransaction
-import androidx.fragment.app.FragmentTransitionImpl
-import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.ui.*
 import com.google.android.material.navigation.NavigationView
@@ -20,11 +15,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import com.martinmarinkovic.myapplication.roomdb.User
 import kotlinx.android.synthetic.main.activity_navigation.*
-import kotlinx.android.synthetic.main.app_bar_navigation.*
-import kotlinx.android.synthetic.main.app_bar_navigation.view.*
 import kotlinx.android.synthetic.main.nav_header_navigation.*
-import java.util.*
 
 class NavigationActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelectedListener{
 

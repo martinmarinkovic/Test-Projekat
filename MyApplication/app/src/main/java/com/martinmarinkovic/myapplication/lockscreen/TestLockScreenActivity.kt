@@ -1,18 +1,14 @@
-package com.martinmarinkovic.myapplication
+package com.martinmarinkovic.myapplication.lockscreen
 
-import android.content.Context
-import android.graphics.PixelFormat
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
-import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
-import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.andrognito.pinlockview.IndicatorDots
 import com.andrognito.pinlockview.PinLockListener
 import com.andrognito.pinlockview.PinLockView
+import com.martinmarinkovic.myapplication.R
 
 class TestLockScreenActivity : AppCompatActivity() {
 

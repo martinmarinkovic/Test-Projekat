@@ -1,10 +1,11 @@
-package com.martinmarinkovic.myapplication
+package com.martinmarinkovic.myapplication.login
 
 import android.os.Bundle
 import android.util.Patterns
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.martinmarinkovic.myapplication.R
+import com.martinmarinkovic.myapplication.helper.toast
 import kotlinx.android.synthetic.main.activity_reset_password.*
 
 private lateinit var auth: FirebaseAuth

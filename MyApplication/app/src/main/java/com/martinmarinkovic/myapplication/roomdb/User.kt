@@ -1,4 +1,4 @@
-package com.martinmarinkovic.myapplication
+package com.martinmarinkovic.myapplication.roomdb
 
 data class User(
     val userID: String? = null,

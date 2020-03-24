@@ -1,4 +1,4 @@
-package com.martinmarinkovic.myapplication
+package com.martinmarinkovic.myapplication.notes
 
 import android.Manifest
 import android.app.Activity.RESULT_OK
@@ -6,7 +6,6 @@ import android.app.AlertDialog
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
@@ -21,12 +20,10 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.bumptech.glide.Glide
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -35,6 +32,8 @@ import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import com.martinmarinkovic.myapplication.*
+import com.martinmarinkovic.myapplication.helper.toast
 import com.martinmarinkovic.myapplication.roomdb.Note
 import com.martinmarinkovic.myapplication.roomdb.NoteDatabase
 import com.theartofdev.edmodo.cropper.CropImage
@@ -92,7 +91,9 @@ class AddNoteFragment : BaseFragment() {
         initMediaRecorder()
 
         arguments?.let {
-            note = AddNoteFragmentArgs.fromBundle(it).note
+            note = AddNoteFragmentArgs.fromBundle(
+                it
+            ).note
             edit_text_title.setText(note?.title)
             edit_text_note.setText(note?.note)
             if (note?.id != null)
@@ -146,7 +147,8 @@ class AddNoteFragment : BaseFragment() {
                         uploadImage(mNote)
                 }
 
-                val action = AddNoteFragmentDirections.actionSaveNote()
+                val action =
+                    AddNoteFragmentDirections.actionSaveNote()
                 view?.let { it1 -> Navigation.findNavController(it1).navigate(action) }
             }
         }
@@ -155,7 +157,11 @@ class AddNoteFragment : BaseFragment() {
     private fun setImages(list: ArrayList<String>){
         val sglm = StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL)
         rv.layoutManager = sglm
-        val igka = NoteImageAdapter(activity!!, list)
+        val igka =
+            NoteImageAdapter(
+                activity!!,
+                list
+            )
         rv.adapter = igka
     }
 
@@ -209,7 +215,6 @@ class AddNoteFragment : BaseFragment() {
     }
 
     private fun uploadImage(note: Note){
-        activity?.toast(imageListToUpload.toString())
         var list = imageListToUpload
         for (img in list) {
             imgUri = Uri.parse(img)
@@ -347,12 +352,14 @@ class AddNoteFragment : BaseFragment() {
                 setNeutralButton("Cancel") { _, _ ->
                 }
                 setNegativeButton("Discard") { _, _ ->
-                    val action = AddNoteFragmentDirections.actionSaveNote()
+                    val action =
+                        AddNoteFragmentDirections.actionSaveNote()
                     view?.let { it1 -> Navigation.findNavController(it1).navigate(action) }
                 }
             }.create().show()
         } else {
-            val action = AddNoteFragmentDirections.actionSaveNote()
+            val action =
+                AddNoteFragmentDirections.actionSaveNote()
             view?.let { it1 ->
                 Navigation.findNavController(it1).navigate(action)
             }
@@ -367,7 +374,8 @@ class AddNoteFragment : BaseFragment() {
                 deleteNoteFirestore(note!!)
                 launch {
                     NoteDatabase(context).getNoteDao().deleteNote(note!!)
-                    val action = AddNoteFragmentDirections.actionSaveNote()
+                    val action =
+                        AddNoteFragmentDirections.actionSaveNote()
                     Navigation.findNavController(view!!).navigate(action)
                 }
             }
@@ -506,7 +514,9 @@ class AddNoteFragment : BaseFragment() {
         val random = Random()
         val sb = StringBuilder(MAX_LENGTH)
         for (i in 0 until MAX_LENGTH)
-            sb.append(ALLOWED_CHARACTERS[random.nextInt(ALLOWED_CHARACTERS.length)])
+            sb.append(
+                ALLOWED_CHARACTERS[random.nextInt(
+                    ALLOWED_CHARACTERS.length)])
         return sb.toString()
     }
 }

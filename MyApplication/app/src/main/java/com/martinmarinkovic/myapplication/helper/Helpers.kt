@@ -1,4 +1,4 @@
-package com.martinmarinkovic.myapplication
+package com.martinmarinkovic.myapplication.helper
 
 import android.content.Context
 import android.widget.Toast

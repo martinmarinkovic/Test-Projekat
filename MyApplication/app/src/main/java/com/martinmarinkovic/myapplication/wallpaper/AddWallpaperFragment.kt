@@ -1,4 +1,4 @@
-package com.martinmarinkovic.myapplication
+package com.martinmarinkovic.myapplication.wallpaper
 
 import android.app.WallpaperManager
 import android.graphics.Bitmap
@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.martinmarinkovic.myapplication.R
+import com.martinmarinkovic.myapplication.helper.toast
 import kotlinx.android.synthetic.main.fragment_add_wallpaper.*
 
 class AddWallpaperFragment : Fragment() {
@@ -24,7 +26,9 @@ class AddWallpaperFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         arguments?.let {
-            val image = AddWallpaperFragmentArgs.fromBundle(it).string
+            val image = AddWallpaperFragmentArgs.fromBundle(
+                it
+            ).string
             val imageUri = Uri.parse(image)
             Glide.with(activity!!)
                 .load(imageUri)

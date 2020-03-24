@@ -12,6 +12,8 @@ import com.google.firebase.ktx.Firebase
 import com.martinmarinkovic.myapplication.loading.LoadingAnimation
 import com.martinmarinkovic.myapplication.loading.LoadingAsync
 import com.martinmarinkovic.myapplication.loading.LoadingImplementation
+import com.martinmarinkovic.myapplication.login.SignInActivity
+import com.martinmarinkovic.myapplication.roomdb.User
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -31,8 +33,8 @@ class MainActivity : AppCompatActivity(),
             .putBoolean("isFirstRun", false).commit()
 
         if (signin) {
-            tv_welcome.setText(getString(R.string.welcome))
-            tv_username.setText(username)
+            tv_welcome.text = getString(R.string.welcome)
+            tv_username.text = username
             btn_main.setText(R.string.registered)
         } else {
             btn_main.setText(R.string.not_registered)

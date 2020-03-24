@@ -1,15 +1,15 @@
-package com.martinmarinkovic.myapplication
+package com.martinmarinkovic.myapplication.notes
 
 import android.app.AlertDialog
 import android.content.Context
 import android.media.MediaPlayer
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.martinmarinkovic.myapplication.R
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_image.view.*
 import kotlinx.android.synthetic.main.note_image.view.*
@@ -25,7 +25,13 @@ class NoteImageAdapter(private val c: Context, private val images: ArrayList<Str
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ColorViewHolder {
-        return ColorViewHolder(LayoutInflater.from(c).inflate(R.layout.note_image, parent, false))
+        return ColorViewHolder(
+            LayoutInflater.from(c).inflate(
+                R.layout.note_image,
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: ColorViewHolder, position: Int) {
@@ -39,7 +45,8 @@ class NoteImageAdapter(private val c: Context, private val images: ArrayList<Str
 
             holder.iv .setOnClickListener {
 
-                val recorderDialogView = LayoutInflater.from(holder.iv.context).inflate(R.layout.play_audio_layout, null)
+                val recorderDialogView = LayoutInflater.from(holder.iv.context).inflate(
+                    R.layout.play_audio_layout, null)
                 val recorderDialogViewBuilder = AlertDialog.Builder(holder.iv.context).setView(recorderDialogView)
                 val  recorderDialog = recorderDialogViewBuilder.show()
                 recorderDialog.getWindow().setLayout(400, 400);
@@ -58,7 +65,8 @@ class NoteImageAdapter(private val c: Context, private val images: ArrayList<Str
 
             holder.iv .setOnClickListener {
 
-                val imageDialogView = LayoutInflater.from(holder.iv.context).inflate(R.layout.fragment_image, null)
+                val imageDialogView = LayoutInflater.from(holder.iv.context).inflate(
+                    R.layout.fragment_image, null)
                 Picasso.get()
                     .load(path)
                     .into(imageDialogView.image_view)

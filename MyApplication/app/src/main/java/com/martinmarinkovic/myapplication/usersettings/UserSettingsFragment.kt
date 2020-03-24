@@ -1,8 +1,7 @@
-package com.martinmarinkovic.myapplication
+package com.martinmarinkovic.myapplication.usersettings
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +13,11 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.martinmarinkovic.myapplication.R
+import com.martinmarinkovic.myapplication.roomdb.User
+import com.martinmarinkovic.myapplication.helper.toast
+import com.martinmarinkovic.myapplication.login.SignInActivity
+import com.martinmarinkovic.myapplication.notes.BaseFragment
 import com.martinmarinkovic.myapplication.roomdb.Note
 import com.martinmarinkovic.myapplication.roomdb.NoteDatabase
 import kotlinx.android.synthetic.main.fragment_user_settings.*
@@ -61,7 +65,8 @@ class UserSettingsFragment : BaseFragment() {
     }
 
     private fun deleteImagesFromStorage(noteId: String) {
-        val ref = storageReference?.child("images")?.child(uid!!)?.child(noteId)
+        val ref = storageReference?.child("images")?.child(
+            uid!!)?.child(noteId)
         ref?.listAll()?.addOnSuccessListener { result ->
             for (fileRef in result.items)
                 fileRef.delete()
@@ -72,7 +77,8 @@ class UserSettingsFragment : BaseFragment() {
 
     private fun deleteUserFromFirestore() {
         if (uid != null) {
-            var ref = db.collection("users").document(uid!!)
+            var ref = db.collection("users").document(
+                uid!!)
             ref.delete()
                 .addOnSuccessListener {
                     ref.get().addOnSuccessListener {
@@ -107,12 +113,15 @@ class UserSettingsFragment : BaseFragment() {
     }
 
     private fun restoreNotes() {
-        ref.document(uid!!).collection("notes").get().addOnCompleteListener { task ->
+        ref.document(
+            uid!!).collection("notes").get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 for (document in task.result!!) {
                     var note = document.toObject<Note>()
-                    note.images = empty
-                    note.audioFiles = empty
+                    note.images =
+                        empty
+                    note.audioFiles =
+                        empty
                     launch {
                         NoteDatabase(context!!).getNoteDao().addNote(note)
                     }

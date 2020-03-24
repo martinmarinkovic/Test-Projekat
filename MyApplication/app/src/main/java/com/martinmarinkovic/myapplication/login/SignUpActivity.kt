@@ -1,15 +1,15 @@
-package com.martinmarinkovic.myapplication
+package com.martinmarinkovic.myapplication.login
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.activity_sign_in.*
+import com.martinmarinkovic.myapplication.R
+import com.martinmarinkovic.myapplication.roomdb.User
 import kotlinx.android.synthetic.main.activity_sign_in.btn_sign_up
 import kotlinx.android.synthetic.main.activity_sign_in.tv_password
 import kotlinx.android.synthetic.main.activity_sign_in.tv_username
@@ -66,7 +66,11 @@ class SignUpActivity : AppCompatActivity() {
                                 val uid = FirebaseAuth.getInstance().currentUser?.uid
                                 val username = tv_username.text.toString()
                                 if (uid != null) {
-                                    val user = User(uid, username)
+                                    val user =
+                                        User(
+                                            uid,
+                                            username
+                                        )
                                     db.collection("users").document(uid)
                                         .set(user)
                                         .addOnSuccessListener { documentReference ->
