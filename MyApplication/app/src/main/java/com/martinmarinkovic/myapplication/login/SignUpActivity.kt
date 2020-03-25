@@ -65,7 +65,7 @@ class SignUpActivity : AppCompatActivity(), LoadingImplementation {
                 loadingAnimation =
                     LoadingAnimation(
                         this,
-                        "loading1.json"
+                        "loading.json"
                     )
                 loadingAnimation.playAnimation(true)
                 LoadingAsync(this).execute()
@@ -98,7 +98,7 @@ class SignUpActivity : AppCompatActivity(), LoadingImplementation {
     }
 
     override fun onFinishedLoading() {
-        startActivity(Intent(this, SignInActivity::class.java))
+        //startActivity(Intent(this, SignInActivity::class.java))
         finish()
     }
 }
