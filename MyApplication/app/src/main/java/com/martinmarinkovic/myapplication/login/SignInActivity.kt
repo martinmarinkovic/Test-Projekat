@@ -9,11 +9,17 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.martinmarinkovic.myapplication.NavigationActivity
 import com.martinmarinkovic.myapplication.R
+import com.martinmarinkovic.myapplication.helper.toast
+import com.martinmarinkovic.myapplication.loading.LoadingAnimation
+import com.martinmarinkovic.myapplication.loading.LoadingAsync
+import com.martinmarinkovic.myapplication.loading.LoadingImplementation
 import kotlinx.android.synthetic.main.activity_sign_in.*
 
-class SignInActivity : AppCompatActivity() {
+class SignInActivity : AppCompatActivity(), LoadingImplementation {
 
     private lateinit var auth: FirebaseAuth
+    private lateinit var loadingAnimation : LoadingAnimation
+    private var check: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +60,15 @@ class SignInActivity : AppCompatActivity() {
 
         auth.signInWithEmailAndPassword(tv_username.text.toString(), tv_password.text.toString())
             .addOnCompleteListener(this) { task ->
+
+                loadingAnimation =
+                    LoadingAnimation(
+                        this,
+                        "loading1.json"
+                    )
+                loadingAnimation.playAnimation(true)
+                LoadingAsync(this).execute()
+
                 if (task.isSuccessful) {
                     val user = auth.currentUser
                     updateUI(user)
@@ -61,6 +76,8 @@ class SignInActivity : AppCompatActivity() {
 
                     updateUI(null)
                 }
+            }.addOnFailureListener{
+                toast("Login failed")
             }
     }
 
@@ -74,19 +91,20 @@ class SignInActivity : AppCompatActivity() {
 
         if (currentUser != null) {
             if(currentUser.isEmailVerified) {
-                startActivity(Intent(this, NavigationActivity::class.java))
-                finish()
+                check = true
             }else{
-                Toast.makeText(
-                    baseContext, "Please verify your email address",
-                    Toast.LENGTH_SHORT
-                ).show()
+                check = false
+                toast("Please verify your email address")
             }
-        } else {
-            Toast.makeText(
-                baseContext, "Login failed",
-                Toast.LENGTH_SHORT
-            ).show()
         }
+    }
+
+    override fun onFinishedLoading() {
+        if (check) {
+            startActivity(Intent(this, NavigationActivity::class.java))
+            finish()
+        } else
+            startActivity(Intent(this, SignInActivity::class.java))
+            finish()
     }
 }

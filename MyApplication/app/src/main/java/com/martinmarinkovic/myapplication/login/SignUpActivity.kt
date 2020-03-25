@@ -9,16 +9,20 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.martinmarinkovic.myapplication.R
+import com.martinmarinkovic.myapplication.loading.LoadingAnimation
+import com.martinmarinkovic.myapplication.loading.LoadingAsync
+import com.martinmarinkovic.myapplication.loading.LoadingImplementation
 import com.martinmarinkovic.myapplication.roomdb.User
 import kotlinx.android.synthetic.main.activity_sign_in.btn_sign_up
 import kotlinx.android.synthetic.main.activity_sign_in.tv_password
 import kotlinx.android.synthetic.main.activity_sign_in.tv_username
 import kotlinx.android.synthetic.main.activity_sign_up.*
 
-class SignUpActivity : AppCompatActivity() {
+class SignUpActivity : AppCompatActivity(), LoadingImplementation {
 
     private lateinit var auth: FirebaseAuth
     private val db = Firebase.firestore
+    private lateinit var loadingAnimation : LoadingAnimation
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +61,15 @@ class SignUpActivity : AppCompatActivity() {
 
         auth.createUserWithEmailAndPassword(tv_email.text.toString(), tv_password.text.toString())
             .addOnCompleteListener(this) { task ->
+
+                loadingAnimation =
+                    LoadingAnimation(
+                        this,
+                        "loading1.json"
+                    )
+                loadingAnimation.playAnimation(true)
+                LoadingAsync(this).execute()
+
                 if (task.isSuccessful) {
                     val user = auth.currentUser
                     user?.sendEmailVerification()
@@ -66,16 +79,10 @@ class SignUpActivity : AppCompatActivity() {
                                 val uid = FirebaseAuth.getInstance().currentUser?.uid
                                 val username = tv_username.text.toString()
                                 if (uid != null) {
-                                    val user =
-                                        User(
-                                            uid,
-                                            username
-                                        )
+                                    val user = User(uid, username)
                                     db.collection("users").document(uid)
                                         .set(user)
                                         .addOnSuccessListener { documentReference ->
-                                            startActivity(Intent(this, SignInActivity::class.java))
-                                            finish()
                                         }
                                         .addOnFailureListener { e ->
                                             Toast.makeText(baseContext, "Adding user to db failed!", Toast.LENGTH_SHORT).show()
@@ -84,8 +91,14 @@ class SignUpActivity : AppCompatActivity() {
                             }
                         }
                 } else {
+                    onFinishedLoading()
                     Toast.makeText(baseContext, "Sign Up failed. Try again after some time.", Toast.LENGTH_SHORT).show()
                 }
             }
+    }
+
+    override fun onFinishedLoading() {
+        startActivity(Intent(this, SignInActivity::class.java))
+        finish()
     }
 }

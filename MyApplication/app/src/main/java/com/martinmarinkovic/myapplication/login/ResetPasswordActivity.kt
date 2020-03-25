@@ -26,6 +26,7 @@ class ResetPasswordActivity : AppCompatActivity() {
             } else {
                 auth.sendPasswordResetEmail(user_email)
                     .addOnCompleteListener(this) { task ->
+
                         if (task.isSuccessful) {
                             toast("We have sent you instructions to reset your password!")
                             finish()
