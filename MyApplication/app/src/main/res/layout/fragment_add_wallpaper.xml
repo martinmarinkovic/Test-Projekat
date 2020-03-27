@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
+    android:id="@+id/relative_layout_for_stickersAndPhoto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,12 +8,36 @@
     tools:context=".wallpaper.AddWallpaperFragment"
     android:background="@drawable/background">
 
-    <ImageView
+    <RelativeLayout
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:id="@+id/relative_layout_for_stickers"
         android:layout_marginTop="10sp"
         android:layout_marginBottom="100sp"
-        android:id="@+id/image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_alignParentTop="true"
+            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:id="@+id/image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+    <GridView
+        android:background="@drawable/background"
+        android:numColumns="3"
+        android:padding="20sp"
+        android:id="@+id/gridview_StickersGallery"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+    </GridView>
 
     <LinearLayout
         android:layout_alignParentBottom="true"
@@ -49,7 +74,7 @@
             android:textColor="@color/white"
             android:layout_centerInParent="true"
             android:layout_alignParentBottom="true"
-            android:id="@+id/btn_stickers"
+            android:id="@+id/button_stickers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
         </Button>

@@ -13,6 +13,7 @@ import android.view.View;
 import com.martinmarinkovic.myapplication.R;
 import com.martinmarinkovic.myapplication.sticker.polygon.Point;
 import com.martinmarinkovic.myapplication.sticker.polygon.Polygon;
+import com.martinmarinkovic.myapplication.wallpaper.AddWallpaperFragment;
 
 
 public class StickerImage extends View {
@@ -60,7 +61,7 @@ private static final int INVALID_POINTER_ID = -1;
     private float kx, ky;
 
     //TODO: Editor je aktivnost u kojoj se nalaze stikeri
-	private Editor mStyle;
+	private AddWallpaperFragment mStyle;
 	
 	private Point a =  new Point(0,0);
 	private Point b=  new Point(0,0);
@@ -68,7 +69,7 @@ private static final int INVALID_POINTER_ID = -1;
 	private Point d=  new Point(0,0);
 	private final Point[] points = new Point[4];
 
-    public StickerImage(Context context, String name, int count, Editor style, int topX, int topY) {
+    public StickerImage(Context context, String name, int count, AddWallpaperFragment style, int topX, int topY) {
       this(context, null, 0);
       //_Image = Drawable.createFromPath(uri);
         
@@ -226,14 +227,14 @@ private static final int INVALID_POINTER_ID = -1;
             		 Log.i("TAG","My view is here: "+_NumberView);
             		 intercept = true;
             		 _Selected = true;
-            		 Editor._IdOfSelectedView = _NumberView;
+                AddWallpaperFragment._IdOfSelectedView = _NumberView;
             		 mStyle.setmCurrentView(_NumberView);
-            		 Editor.invalidateOtherStickers(_NumberView);
+                AddWallpaperFragment.invalidateOtherStickers(_NumberView);
             		 invalidate();
             }
             else  
             {
-            		Editor._IdOfSelectedView = -1;
+                AddWallpaperFragment._IdOfSelectedView = -1;
             		_Selected = false;
             		invalidate();
             }

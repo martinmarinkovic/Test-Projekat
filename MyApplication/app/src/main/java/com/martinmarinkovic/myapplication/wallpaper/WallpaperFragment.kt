@@ -97,14 +97,14 @@ class WallpaperFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == TAKE_PHOTO_REQUEST) {
             CropImage.activity(fileUri)
-                .setMinCropWindowSize(500, 1000)
+                .setMinCropWindowSize(600, 900)
                 .setAspectRatio(9,19)
                 .start(context!!,this)
         }
         if (resultCode == Activity.RESULT_OK && requestCode == PICK_PHOTO_REQUEST) {
             fileUri = data?.data
             CropImage.activity(fileUri)
-                .setMinCropWindowSize(500, 1000)
+                .setMinCropWindowSize(600, 900)
                 .setAspectRatio(9,19)
                 .start(context!!,this)
         }

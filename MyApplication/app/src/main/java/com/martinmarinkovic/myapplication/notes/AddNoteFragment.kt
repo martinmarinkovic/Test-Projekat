@@ -77,7 +77,8 @@ class AddNoteFragment : BaseFragment() {
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? { setHasOptionsMenu(true)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_add_note, container, false)
     }
 

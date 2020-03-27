@@ -2,7 +2,6 @@ package com.martinmarinkovic.myapplication.loading
 
 import android.os.AsyncTask
 
-
 interface LoadingImplementation {
     fun onFinishedLoading()
 }
