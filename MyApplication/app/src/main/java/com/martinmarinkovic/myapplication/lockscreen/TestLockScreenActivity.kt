@@ -51,6 +51,7 @@ class TestLockScreenActivity : AppCompatActivity() {
         //pin_lock_view.enableLayoutShuffling()
         mPinLockView?.pinLength = 4
         mPinLockView?.textColor = resources.getColor(R.color.white)
+        mPinLockView?.buttonBackgroundDrawable = resources.getDrawable(R.drawable.btn_0)
 
         if (mIndicatorDots != null) {
             mIndicatorDots.setIndicatorType(IndicatorDots.IndicatorType.FILL_WITH_ANIMATION)

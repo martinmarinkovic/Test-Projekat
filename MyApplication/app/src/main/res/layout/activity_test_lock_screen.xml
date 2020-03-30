@@ -4,17 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
+    android:background="@drawable/background"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".lockscreen.TestLockScreenActivity">
 
     <ImageView
         android:id="@+id/profile_image"
-        android:layout_width="84dp"
-        android:layout_height="84dp"
+        android:layout_width="150sp"
+        android:layout_height="150sp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="104dp"
-        android:src="@drawable/ic_note" />
+        android:src="@drawable/icon_profile" />
 
     <TextView
         android:id="@+id/profile_name"
@@ -26,6 +26,7 @@
         android:fontFamily="sans-serif-thin"
         android:gravity="center"
         android:maxLines="1"
+        android:textStyle="bold"
         android:text="Welcome"
         android:textColor="@color/white"
         android:textSize="34sp" />
@@ -44,11 +45,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/indicator_dots"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="36dp"
         app:keypadButtonSize="72dp"
         app:keypadShowDeleteButton="true"
         app:keypadTextColor="@color/white"
         app:keypadTextSize="18dp" />
-
-
 </RelativeLayout>

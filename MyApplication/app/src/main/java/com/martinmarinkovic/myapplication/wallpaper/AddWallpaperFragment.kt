@@ -13,7 +13,6 @@ import android.view.*
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.Button
 import android.widget.GridView
-import android.widget.ImageView
 import android.widget.RelativeLayout
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
