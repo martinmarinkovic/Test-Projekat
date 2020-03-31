@@ -76,7 +76,7 @@ dependencies {
 
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
 
-    implementation 'com.andrognito.pinlockview:pinlockview:2.1.0'
+    //implementation 'com.andrognito.pinlockview:pinlockview:2.1.0'
 
     implementation 'com.airbnb.android:lottie:3.4.0'
 

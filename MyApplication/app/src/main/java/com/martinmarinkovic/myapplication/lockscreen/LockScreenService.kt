@@ -85,7 +85,7 @@ class LockScreenService : Service() {
     }
 
     private fun startLockScreenActivity() {
-        val lockScreenIntent = Intent(mContext, TestLockScreenActivity::class.java)
+        val lockScreenIntent = Intent(mContext, EnterPinActivity::class.java)
         lockScreenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(lockScreenIntent)
     }

@@ -49,13 +49,7 @@ class LockScreen {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun deactivate() {
-        if (context != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                context!!.startForegroundService(Intent(context, LockScreenService::class.java))
-            } else {
-                context!!.stopService(Intent(context, LockScreenService::class.java))
-            }
-        }
+        context!!.stopService(Intent(context, LockScreenService::class.java))
     }
 
     fun isActive(): Boolean {

@@ -1,7 +1,9 @@
 package com.martinmarinkovic.myapplication.lockscreen
 
-import android.app.AlertDialog
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
+import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,12 +11,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import com.google.android.material.snackbar.Snackbar
 import com.martinmarinkovic.myapplication.R
+import com.martinmarinkovic.myapplication.helper.toast
 import kotlinx.android.synthetic.main.fragment_lock_screen.*
 
 class LockScreenFragment : Fragment() {
 
+    private val PACKAGE_NAME = "com.martinmarinkovic.myapplication"
+    private val PIN_SAVED = "pinEnabled"
     private var isServisActiv: Boolean = false;
+    private val REQUEST_CODE = 123
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -26,31 +33,52 @@ class LockScreenFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         LockScreen.getInstance().init(context!!, true)
-
-        if (LockScreen.getInstance().isActive()) {
-            isServisActiv = true
-            btn_enable_lock_screen.text = "Disable Lock Screen"
-        } else {
-            isServisActiv = false
-            btn_enable_lock_screen.text = ("Enable Lock Screen")
-        }
+        btn_set_password.setTextColor(Color.GRAY)
+        btn_set_password.isEnabled = false
 
         btn_enable_lock_screen.setOnClickListener{
-            if (!isServisActiv){
+            if (!LockScreen.getInstance().isActive()){
                 LockScreen.getInstance().active()
+                btn_enable_lock_screen.text = "Disable Lock Screen"
+                btn_set_password.isEnabled = true
+                btn_set_password.setTextColor(Color.WHITE)
             } else {
                 LockScreen.getInstance().deactivate()
+                btn_enable_lock_screen.text = ("Enable Lock Screen")
+                btn_set_password.setTextColor(Color.GRAY)
+                btn_set_password.isEnabled = false
             }
         }
 
         btn_set_password.setOnClickListener{
-            val mDialogView = LayoutInflater.from(activity).inflate(R.layout.set_pin_dialog_layout, null)
+
+            // set pin instead of checking it
+//            Intent intent = new Intent(MainActivity.this, EnterPinActivity.class);
+            val intent = EnterPinActivity.getIntent(context, true)
+            startActivityForResult(intent, REQUEST_CODE)
+            //val intent = Intent(context, EnterPinActivity::class.java)
+            //startActivity(intent)
+            /*val mDialogView = LayoutInflater.from(activity).inflate(R.layout.set_pin_dialog_layout, null)
             val mBuilder = AlertDialog.Builder(activity)
                 .setView(mDialogView)
             val  mAlertDialog = mBuilder.show()
             mAlertDialog.getWindow().setLayout(800, 800);
             mDialogView.setOnClickListener{
                 mAlertDialog.dismiss()
+            }*/
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            REQUEST_CODE ->
+                if (resultCode == EnterPinActivity.RESULT_OK) {
+                val editor: SharedPreferences.Editor = activity?.getSharedPreferences(PACKAGE_NAME, MODE_PRIVATE)!!
+                    .edit()
+                    editor.putBoolean(PIN_SAVED, true)
+                    editor.apply()
+                    activity?.toast(getString(R.string.pin_enabled))
             }
         }
     }

@@ -59,4 +59,16 @@
     <string name="permission_accessibility_setting_description">"Turn on and it locks all soft key including HOME, RECENTS, BACK, MENU buttons.
 
 You may be warned about potential privacy risk, that's just a regular informative warning for any accessibility service. We promise NEVER EVER collecting your personal information in this accessibility service."</string>
+
+    <string name="pinlock_title">Enter Pin Code</string>
+    <string name="pinlock_settitle">Set Pin Code</string>
+    <string name="pinlock_firsttry">Wrong Pin Code: First Try</string>
+    <string name="pinlock_secondtry">Wrong Pin Code: Second Try</string>
+    <string name="pinlock_wrongpin">Wrong Pin code</string>
+    <string name="pinlock_secondPin">Enter Pin Code Again</string>
+    <string name="pinlock_tryagain">Pin Codes Are Not The Same</string>
+    <string name="pinlock_fingerprint">Use Fingerprint</string>
+
+    <string name="pin_enabled">Pin Enabled</string>
+    <string name="action_close">Dismiss</string>
 </resources>

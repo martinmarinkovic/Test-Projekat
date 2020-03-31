@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:background="@drawable/background"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+tools:context=".lockscreen.TestLockScreenActivity">
+
+<ImageView
+    android:id="@+id/profile_image"
+    android:layout_width="150sp"
+    android:layout_height="150sp"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="104dp"
+    android:src="@drawable/icon_profile" />
+
+<TextView
+    android:id="@+id/title"
+    android:layout_width="256dp"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/profile_image"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="36dp"
+    android:fontFamily="sans-serif-thin"
+    android:gravity="center"
+    android:maxLines="1"
+    android:textStyle="bold"
+    android:text="Enter Password"
+    android:textColor="@color/white"
+    android:textSize="34sp" />
+
+<com.martinmarinkovic.myapplication.lockscreen.IndicatorDots
+    android:id="@+id/indicator_dots"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/title"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="36dp" />
+
+<TextView
+    android:id="@+id/attempts"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="20sp"
+    android:textColor="@color/blue"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/indicator_dots" />
+
+<com.martinmarinkovic.myapplication.lockscreen.PinLockView
+    android:id="@+id/pinlockView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/indicator_dots"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="36dp"
+    app:keypadButtonSize="72dp"
+    app:keypadShowDeleteButton="true"
+    app:keypadTextColor="@color/white"
+    app:keypadTextSize="18dp" />
+</RelativeLayout>
