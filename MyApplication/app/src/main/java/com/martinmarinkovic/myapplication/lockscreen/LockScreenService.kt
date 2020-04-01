@@ -68,9 +68,9 @@ class LockScreenService : Service() {
         serviceStartId = startId
         stateReceiver(true)
         if (null != intent) {
-            Log.d(TAG, TAG + " onStartCommand intent  existed")
+            Log.d(TAG, "$TAG onStartCommand intent  existed")
         } else {
-            Log.d(TAG, TAG + " onStartCommand intent NOT existed")
+            Log.d(TAG, "$TAG onStartCommand intent NOT existed")
         }
         return START_STICKY
     }
@@ -85,7 +85,7 @@ class LockScreenService : Service() {
     }
 
     private fun startLockScreenActivity() {
-        val lockScreenIntent = Intent(mContext, EnterPinActivity::class.java)
+        val lockScreenIntent = Intent(mContext, LockScreenActivity::class.java)
         lockScreenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(lockScreenIntent)
     }

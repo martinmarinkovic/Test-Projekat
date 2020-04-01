@@ -1,4 +1,4 @@
-package com.martinmarinkovic.myapplication.sticker;
+package com.martinmarinkovic.myapplication.wallpaper.sticker;
 
 import android.view.MotionEvent;
 

@@ -1,4 +1,4 @@
-package com.martinmarinkovic.myapplication.sticker.polygon;
+package com.martinmarinkovic.myapplication.wallpaper.sticker.polygon;
 /**
  * Point on 2D landscape
  * 

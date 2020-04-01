@@ -1,4 +1,4 @@
-package com.martinmarinkovic.myapplication.sticker;
+package com.martinmarinkovic.myapplication.wallpaper.sticker;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -11,8 +11,8 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import com.martinmarinkovic.myapplication.R;
-import com.martinmarinkovic.myapplication.sticker.polygon.Point;
-import com.martinmarinkovic.myapplication.sticker.polygon.Polygon;
+import com.martinmarinkovic.myapplication.wallpaper.sticker.polygon.Point;
+import com.martinmarinkovic.myapplication.wallpaper.sticker.polygon.Polygon;
 import com.martinmarinkovic.myapplication.wallpaper.AddWallpaperFragment;
 
 

@@ -1,4 +1,4 @@
-package com.martinmarinkovic.myapplication.sticker.polygon;
+package com.martinmarinkovic.myapplication.wallpaper.sticker.polygon;
 
 /**
  * Line is defined by starting point and ending point on 2D dimension.<br>

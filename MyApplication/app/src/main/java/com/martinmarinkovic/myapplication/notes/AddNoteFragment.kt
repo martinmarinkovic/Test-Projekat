@@ -41,6 +41,7 @@ import kotlinx.android.synthetic.main.audio_recorder_layout.view.*
 import kotlinx.android.synthetic.main.custom_dialog_layout.view.*
 import kotlinx.android.synthetic.main.fragment_add_note.*
 import kotlinx.coroutines.launch
+import java.io.File
 import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
@@ -88,8 +89,6 @@ class AddNoteFragment : BaseFragment() {
         firebaseStore = FirebaseStorage.getInstance()
         storageReference = FirebaseStorage.getInstance().reference
         uid = FirebaseAuth.getInstance().currentUser?.uid
-
-        initMediaRecorder()
 
         arguments?.let {
             note = AddNoteFragmentArgs.fromBundle(
@@ -399,7 +398,7 @@ class AddNoteFragment : BaseFragment() {
             mAlertDialog.dismiss()
         }
         mDialogView.btn_recorder.setOnClickListener {
-            startAudioRecoroder()
+            askAudioRecoroderPermission()
             mAlertDialog.dismiss()
         }
     }
@@ -421,7 +420,11 @@ class AddNoteFragment : BaseFragment() {
 
     private fun initMediaRecorder() {
         mediaRecorder = MediaRecorder()
-        output = Environment.getExternalStorageDirectory().absolutePath
+        val root = Environment.getExternalStorageDirectory().toString()
+        val myDir = File("$root/MyApp/saved_audio_records")
+        myDir.mkdirs()
+        output = myDir.toString()
+        startRecording()
     }
 
     private fun showAudioOpenDialog(){
@@ -436,17 +439,36 @@ class AddNoteFragment : BaseFragment() {
         }
     }
 
-    private fun startAudioRecoroder(){
-        if (ContextCompat.checkSelfPermission(activity!!,
-                Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(activity!!,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            val permissions = arrayOf(Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
-            ActivityCompat.requestPermissions(activity!!, permissions,0)
-        } else {
-            initMediaRecorder()
-            startRecording()
-            showAudioOpenDialog()
-        }
+    private fun askAudioRecoroderPermission(){
+        Dexter.withActivity(activity).withPermissions(
+            Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ).withListener(object : MultiplePermissionsListener {
+            override fun onPermissionsChecked(report: MultiplePermissionsReport) {/* ... */
+                if(report.areAllPermissionsGranted()){
+                    initMediaRecorder()
+                }else{
+                }
+            }
+            @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+            override fun onPermissionRationaleShouldBeShown(
+                permissions: MutableList<com.karumi.dexter.listener.PermissionRequest>?, token: PermissionToken?
+            ) { context?.let {
+                AlertDialog.Builder(it)
+                    .setTitle("Permissions Error!")
+                    .setMessage("Please allow permissions to start recording")
+                    .setNegativeButton(android.R.string.cancel) { dialog, _ ->
+                        dialog.dismiss()
+                        token?.cancelPermissionRequest()
+                    }
+                    .setPositiveButton(android.R.string.ok) { dialog, _ ->
+                        dialog.dismiss()
+                        token?.continuePermissionRequest()
+                    }
+                    .setOnDismissListener { token?.cancelPermissionRequest() }
+                    .show()
+            }
+            }
+        }).check()
     }
 
     private fun startRecording() {
@@ -460,6 +482,7 @@ class AddNoteFragment : BaseFragment() {
             mediaRecorder?.prepare()
             mediaRecorder?.start()
             state = true
+            showAudioOpenDialog()
             Toast.makeText(activity!!, "Recording started!", Toast.LENGTH_SHORT).show()
         } catch (e: IllegalStateException) { e.printStackTrace()
         } catch (e: IOException) { e.printStackTrace() }
@@ -495,13 +518,13 @@ class AddNoteFragment : BaseFragment() {
             mediaRecorder?.stop()
             mediaRecorder?.release()
             state = false
-            saveFilePath()
+            saveAudioFile()
         } else{
             Toast.makeText(activity!!, "You are not recording right now!", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun saveFilePath(){
+    private fun saveAudioFile(){
         audioFilesList.add(output.toString())
         allFilesList.add(output.toString())
         setImages(allFilesList)

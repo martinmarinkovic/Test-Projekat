@@ -8,58 +8,27 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import com.martinmarinkovic.myapplication.R
 
-/*
-class StickerAdapter(private val c: Context, private val images: ArrayList<Int>) :
-    RecyclerView.Adapter<StickerAdapter.ColorViewHolder>() {
-
-    override fun getItemCount(): Int {
-        return images.size
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ColorViewHolder {
-        return ColorViewHolder(
-            LayoutInflater.from(c).inflate(R.layout.note_image, parent, false)
-        )
-    }
-
-    override fun onBindViewHolder(holder: ColorViewHolder, position: Int) {
-        var path = images[position]
-
-        Glide.with(holder.iv.context)
-            .load(path)
-            //.placeholder(R.drawable.ic_image_place_holder)
-            .into(holder.iv)
-
-        holder.iv.setOnClickListener {
-
-        }
-    }
-
-    class ColorViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val iv  = view.iv  as ImageView
-    }
-}*/
-
 class StickerAdapter(context: Context) : BaseAdapter() {
 
+    private var mContext: Context? = null
     private var items = arrayOfNulls<Int>(10)
-    var inflater: LayoutInflater
+    private var inflater: LayoutInflater? = null
 
-    override fun getView(position: Int, convertView: View, parent: ViewGroup): View {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
 
-        var convertView = inflater.inflate(R.layout.sticker_layout, null)
-        val imageView = convertView.findViewById<View>(R.id.iv) as ImageView
-        imageView.setImageResource(items.get(position)!!)
-
-        return convertView
+        var view = convertView
+        view = inflater!!.inflate(R.layout.note_image, null)
+        val imageView = view?.findViewById<View>(R.id.iv) as ImageView
+        imageView.setImageResource(items[position]!!)
+        return view
     }
 
     override fun getCount(): Int {
         return items.size
     }
 
-    override fun getItem(position: Int): Int? {
-        return items.get(position)
+    override fun getItem(position: Int): Any {
+        return items[position]!!
     }
 
     override fun getItemId(position: Int): Long {
@@ -67,6 +36,7 @@ class StickerAdapter(context: Context) : BaseAdapter() {
     }
 
     init {
+        mContext = context
         items = arrayOfNulls(10)
         items[0] = R.drawable.sticker_1
         items[1] = R.drawable.sticker_2
@@ -78,7 +48,6 @@ class StickerAdapter(context: Context) : BaseAdapter() {
         items[7] = R.drawable.sticker_8
         items[8] = R.drawable.sticker_9
         items[9] = R.drawable.sticker_10
-        inflater =
-            context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        inflater = mContext!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     }
 }

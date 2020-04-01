@@ -1,4 +1,4 @@
-package com.martinmarinkovic.myapplication.sticker.polygon;
+package com.martinmarinkovic.myapplication.wallpaper.sticker.polygon;
 
 import java.util.ArrayList;
 import java.util.List;

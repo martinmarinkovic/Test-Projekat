@@ -16,10 +16,9 @@ import android.widget.GridView
 import android.widget.RelativeLayout
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.martinmarinkovic.myapplication.GalleryAdapter
 import com.martinmarinkovic.myapplication.R
 import com.martinmarinkovic.myapplication.helper.toast
-import com.martinmarinkovic.myapplication.sticker.StickerImage
+import com.martinmarinkovic.myapplication.wallpaper.sticker.StickerImage
 import kotlinx.android.synthetic.main.fragment_add_wallpaper.*
 import java.io.File
 import java.io.FileOutputStream
@@ -47,6 +46,7 @@ class AddWallpaperFragment : Fragment() {
     private var _ViewsCount = 0
     private var _AddWallpaperFragment: AddWallpaperFragment? = null
     private var bitmap: Bitmap? = null
+    private var canvas: Canvas? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setHasOptionsMenu(true)
@@ -60,7 +60,7 @@ class AddWallpaperFragment : Fragment() {
         _ContainerLayout = activity?.findViewById(R.id.relative_layout_for_stickersAndPhoto)
         _StickersButton = activity?.findViewById(R.id.button_stickers)
         _StickersGallery = activity?.findViewById(R.id.gridview_StickersGallery)
-        _StickersGallery!!.adapter = GalleryAdapter(activity)
+        _StickersGallery!!.adapter = activity?.let { StickerAdapter(it) }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -74,7 +74,6 @@ class AddWallpaperFragment : Fragment() {
             Glide.with(activity!!)
                 .load(imageUri)
                 .into(image_view )
-            //bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, imageUri)
         }
 
         _AddWallpaperFragment = this
@@ -82,9 +81,6 @@ class AddWallpaperFragment : Fragment() {
         canvasHeight = StickersLayout?.layoutParams!!.height
 
         btn_set_wallpaper.setOnClickListener{
-            /*var wallpaperManager: WallpaperManager = WallpaperManager.getInstance(activity)
-            wallpaperManager.setBitmap(bitmap)
-            activity?.toast("New wallpaper is set")*/
             saveWallpaper()
         }
 
@@ -108,12 +104,10 @@ class AddWallpaperFragment : Fragment() {
             img.invalidate()
             _StickersGallery!!.visibility = View.INVISIBLE
             _GalleryStickersOn = false
-            }
+        }
     }
 
-    //_ContainerLayout - da se stave dimenzije slike pred snimanje?
     private fun saveWallpaper() {
-        //_ContainerLayout!!.invalidate()
         StickersLayout?.invalidate()
         val img = setViewToBitmapImage(StickersLayout!!)
         if (img != null) {
@@ -137,7 +131,6 @@ class AddWallpaperFragment : Fragment() {
     }
 
     private fun deleteSticker() {
-        // Toast.makeText(this,"Array size is: "+_ViewsArray.size(), Toast.LENGTH_SHORT).show();
         if (_ViewsArray.size > 0) {
             if (_CurrentView != -1) {
                 Log.i("DELETE", "Should remove this view")
@@ -179,25 +172,20 @@ class AddWallpaperFragment : Fragment() {
     }
 
     private fun setViewToBitmapImage(view: View): Bitmap? {
-        //Define a bitmap with the same size as the view
         val returnedBitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
-        //Bind a canvas to it
         val canvas = Canvas(returnedBitmap)
-        //Get the view's background
         val bgDrawable = view.background
-        if (bgDrawable != null) //has background drawable, then draw it on the canvas
+        if (bgDrawable != null)
             bgDrawable.draw(canvas)
-        else  //does not have background drawable, then draw white background on the canvas
+        else
             canvas.drawColor(Color.WHITE)
-        // draw the view on the canvas
         view.draw(canvas)
-        //return the bitmap
         return returnedBitmap
     }
 
     private fun SaveImage(finalBitmap: Bitmap) {
         val root = Environment.getExternalStorageDirectory().toString()
-        val myDir = File("$root/saved_images")
+        val myDir = File("$root/MyApp/saved_images")
         myDir.mkdirs()
         val generator = Random()
         var n = 10000

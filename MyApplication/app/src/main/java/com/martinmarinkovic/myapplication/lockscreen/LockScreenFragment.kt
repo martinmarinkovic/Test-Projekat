@@ -1,5 +1,6 @@
 package com.martinmarinkovic.myapplication.lockscreen
 
+import android.app.Activity.RESULT_OK
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.content.SharedPreferences
@@ -52,10 +53,9 @@ class LockScreenFragment : Fragment() {
 
         btn_set_password.setOnClickListener{
 
-            // set pin instead of checking it
-//            Intent intent = new Intent(MainActivity.this, EnterPinActivity.class);
-            val intent = EnterPinActivity.getIntent(context, true)
+            val intent = LockScreenActivity.getIntent(context, true)
             startActivityForResult(intent, REQUEST_CODE)
+
             //val intent = Intent(context, EnterPinActivity::class.java)
             //startActivity(intent)
             /*val mDialogView = LayoutInflater.from(activity).inflate(R.layout.set_pin_dialog_layout, null)
@@ -73,7 +73,7 @@ class LockScreenFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             REQUEST_CODE ->
-                if (resultCode == EnterPinActivity.RESULT_OK) {
+                if (resultCode == RESULT_OK) {
                 val editor: SharedPreferences.Editor = activity?.getSharedPreferences(PACKAGE_NAME, MODE_PRIVATE)!!
                     .edit()
                     editor.putBoolean(PIN_SAVED, true)
