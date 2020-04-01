@@ -12,12 +12,17 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.*
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
+import androidx.core.widget.doAfterTextChanged
+import androidx.core.widget.doOnTextChanged
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.gms.tasks.Continuation
@@ -67,6 +72,7 @@ class AddNoteFragment : BaseFragment() {
     private var noteId: String = ""
     private var audioFilesList: ArrayList<String> = ArrayList()
     private var allFilesList: ArrayList<String> = ArrayList()
+    private var isTextChange: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -108,6 +114,15 @@ class AddNoteFragment : BaseFragment() {
                 allFilesList.addAll(audioFilesList)
                 setImages(allFilesList)
             }
+        }
+
+
+        edit_text_title.doAfterTextChanged {
+            isTextChange = true
+        }
+
+        edit_text_note.doAfterTextChanged {
+            isTextChange = true
         }
     }
 
@@ -343,7 +358,7 @@ class AddNoteFragment : BaseFragment() {
         val noteTitle = edit_text_title.text.toString().trim()
         val noteBody = edit_text_note.text.toString().trim()
 
-        if (checkInputs(noteTitle, noteBody)) {
+        if (checkInputs(noteTitle, noteBody) and isTextChange) {
             AlertDialog.Builder(context).apply {
                 setTitle("Save your changes or discard them?")
                 setPositiveButton("Save") { _, _ ->
