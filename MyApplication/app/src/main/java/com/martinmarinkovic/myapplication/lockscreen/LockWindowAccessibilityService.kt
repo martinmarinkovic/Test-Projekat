@@ -4,10 +4,11 @@ import android.accessibilityservice.AccessibilityService
 import android.view.KeyEvent
 import android.view.accessibility.AccessibilityEvent
 import android.widget.Toast
+import com.martinmarinkovic.myapplication.helper.toast
 
 class LockWindowAccessibilityService : AccessibilityService() {
 
-    private var lockScreenShow: Boolean = true // ???
+    private var lockScreenShow: Boolean = true
 
     override fun onKeyEvent(event: KeyEvent): Boolean {
         LockScreen.getInstance().init(this)

@@ -188,7 +188,7 @@ class AddNoteFragment : BaseFragment() {
                 db.collection("users").document(uid!!).collection("notes").document(note.id!!)
                     .set(note)
                     .addOnSuccessListener {
-                        Toast.makeText(activity, "Success!", Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(activity, "Success!", Toast.LENGTH_SHORT).show()
                     }
                     .addOnFailureListener { e ->
                         Toast.makeText(activity, "Fail!", Toast.LENGTH_SHORT).show()
@@ -204,7 +204,8 @@ class AddNoteFragment : BaseFragment() {
                 db.collection("users").document(uid!!).collection("notes").document(note.id!!)
                     .delete()
                     .addOnSuccessListener {
-                        Toast.makeText(activity, "Success!", Toast.LENGTH_SHORT).show()
+                        deleteImagesFromStorage(note.id!!)
+                        //Toast.makeText(activity, "Success!", Toast.LENGTH_SHORT).show()
                     }
                     .addOnFailureListener { e ->
                         Toast.makeText(activity, "Fail!", Toast.LENGTH_SHORT).show()
@@ -222,7 +223,7 @@ class AddNoteFragment : BaseFragment() {
         db.collection("users").document(uid!!).collection("notes").document(note.id!!)
             .set(note)
             .addOnSuccessListener { documentReference ->
-                Toast.makeText(activity, "Saved to Firestore", Toast.LENGTH_LONG).show()
+                //Toast.makeText(activity, "Saved to Firestore", Toast.LENGTH_LONG).show()
             }
             .addOnFailureListener { e ->
                 Toast.makeText(activity, "Error saving to Firestore", Toast.LENGTH_LONG).show()
@@ -260,6 +261,16 @@ class AddNoteFragment : BaseFragment() {
             } else {
                 Toast.makeText(activity, "Error Uploading Image", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    private fun deleteImagesFromStorage(noteId: String) {
+        val ref = storageReference?.child("images")?.child(uid!!)?.child(noteId)
+        ref?.listAll()?.addOnSuccessListener { result ->
+            for (fileRef in result.items)
+                fileRef.delete()
+        }?.addOnFailureListener {
+            activity?.toast("Error: Delete Images From Storage!")
         }
     }
 

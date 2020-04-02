@@ -21,7 +21,6 @@ class LockScreenFragment : Fragment() {
 
     private val PACKAGE_NAME = "com.martinmarinkovic.myapplication"
     private val PIN_SAVED = "pinEnabled"
-    private var isServisActiv: Boolean = false;
     private val REQUEST_CODE = 123
 
     override fun onCreateView(
@@ -34,10 +33,11 @@ class LockScreenFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         LockScreen.getInstance().init(context!!, true)
-        btn_set_password.setTextColor(Color.GRAY)
-        btn_set_password.isEnabled = false
+        check()
+
 
         btn_enable_lock_screen.setOnClickListener{
+            LockScreen.getInstance().init(context!!, true)
             if (!LockScreen.getInstance().isActive()){
                 LockScreen.getInstance().active()
                 btn_enable_lock_screen.text = "Disable Lock Screen"
@@ -80,6 +80,18 @@ class LockScreenFragment : Fragment() {
                     editor.apply()
                     activity?.toast(getString(R.string.pin_enabled))
             }
+        }
+    }
+
+    fun check(){
+        if (!LockScreen.getInstance().isActive()) {
+            btn_enable_lock_screen.text = "Enable Lock Screen"
+            btn_set_password.isEnabled = true
+            btn_set_password.setTextColor(Color.GRAY)
+        } else {
+            btn_enable_lock_screen.text = ("Disable Lock Screen")
+            btn_set_password.setTextColor(Color.WHITE)
+            btn_set_password.isEnabled = false
         }
     }
 }

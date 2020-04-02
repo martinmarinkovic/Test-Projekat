@@ -4,15 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ImageFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <Button
         android:id="@+id/btn_close"
         android:background="@drawable/ic_close"
         app:layout_constraintRight_toRightOf="@+id/image_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30sp"
+        android:layout_height="30sp"
         tools:ignore="MissingConstraints">
     </Button>
 

@@ -34,7 +34,6 @@
 
             <ImageView
                 android:id="@+id/iv_image"
-                android:background="@drawable/note_layout_image"
                 android:layout_alignParentRight="true"
                 android:layout_width="80dp"
                 android:layout_height="80dp"/>

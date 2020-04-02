@@ -60,14 +60,13 @@ class NoteImageAdapter(private val c: Context, private val images: ArrayList<Str
         } else {
             Glide.with(holder.iv.context)
                 .load(path)
-                //.placeholder(R.drawable.ic_image_place_holder)
                 .into(holder.iv );
 
             holder.iv .setOnClickListener {
 
                 val imageDialogView = LayoutInflater.from(holder.iv.context).inflate(
                     R.layout.fragment_image, null)
-                Picasso.get()
+                Glide.with(imageDialogView.image_view.context)
                     .load(path)
                     .into(imageDialogView.image_view)
                 val imageDialogViewBuilder = AlertDialog.Builder(holder.iv.context).setView(imageDialogView)

@@ -2,19 +2,22 @@ package com.martinmarinkovic.myapplication.lockscreen
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.app.ActionBar
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.PixelFormat
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
+import android.view.KeyEvent
 import android.view.View
-import android.view.Window
 import android.view.WindowManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.martinmarinkovic.myapplication.PinLockView
 import com.martinmarinkovic.myapplication.R
 import com.martinmarinkovic.myapplication.lockscreen.Utils.Companion.sha256
+
 
 class LockScreenActivity : AppCompatActivity() {
 
@@ -31,20 +34,7 @@ class LockScreenActivity : AppCompatActivity() {
 
         fun getIntent(context: Context?, setPin: Boolean): Intent? {
             val intent = Intent(context, LockScreenActivity::class.java)
-            intent.putExtra(LockScreenActivity.EXTRA_SET_PIN, setPin)
-            return intent
-        }
-
-        fun getIntent(context: Context?, fontText: String?, fontNum: String?): Intent {
-            val intent = Intent(context, LockScreenActivity::class.java)
-            intent.putExtra(LockScreenActivity.EXTRA_FONT_TEXT, fontText)
-            intent.putExtra(LockScreenActivity.EXTRA_FONT_NUM, fontNum)
-            return intent
-        }
-
-        fun getIntent(context: Context?, setPin: Boolean, fontText: String?, fontNum: String?): Intent? {
-            val intent = getIntent(context, fontText, fontNum)
-            intent.putExtra(LockScreenActivity.EXTRA_SET_PIN, setPin)
+            intent.putExtra(EXTRA_SET_PIN, setPin)
             return intent
         }
     }
@@ -57,35 +47,26 @@ class LockScreenActivity : AppCompatActivity() {
     private var mFirstPin = ""
     private var mTryCount: Int = 0
 
+
+/*    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+
+        if(keyCode == KeyEvent.KEYCODE_HOME)
+        {
+            //The Code Want to Perform.
+        }
+
+        return true
+    }*/
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        //requestWindowFeature(Window.FEATURE_NO_TITLE)
-        //window.addFlags(
-            //WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
-            //WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or
-            //WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-        //)
-        //getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-        //super.onAttachedToWindow()
-
+        this.window.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY)
         setContentView(R.layout.activity_lock_screen)
-
         mTextAttempts = findViewById<View>(R.id.attempts) as TextView
         mTextTitle = findViewById<View>(R.id.title) as TextView
         mIndicatorDots = findViewById<View>(R.id.indicator_dots) as IndicatorDots
 
-
-        /*     SharedPreferences sharedPrefs = getSharedPreferences(PACKAGE_NAME, MODE_PRIVATE);
-        if (sharedPrefs.contains(PIN_SAVED)) {
-            if (sharedPrefs.getBoolean(PIN_SAVED, true)) {
-                mSetPin = getIntent().getBooleanExtra(EXTRA_SET_PIN, true);
-            }
-        } else if (!sharedPrefs.contains(PIN_SAVED)) {
-            mSetPin = getIntent().getBooleanExtra(EXTRA_SET_PIN, false);
-        }*/
-
-        mSetPin = intent.getBooleanExtra(LockScreenActivity.EXTRA_SET_PIN, false)
+        mSetPin = intent.getBooleanExtra(EXTRA_SET_PIN, false)
 
         if (mSetPin) {
             changeLayoutForSetPin()
@@ -190,4 +171,5 @@ class LockScreenActivity : AppCompatActivity() {
         setResult(RESULT_BACK_PRESSED)
         super.onBackPressed()
     }
+
 }

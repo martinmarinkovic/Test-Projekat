@@ -89,7 +89,6 @@ class UserSettingsFragment : BaseFragment() {
                                     var note = document.toObject<Note>()
                                     document.reference.delete()
                                     launch {
-                                        activity?.toast(note.toString())
                                         NoteDatabase(context!!).getNoteDao().deleteNote(note)
                                         deleteImagesFromStorage(note.id!!)
                                     }
@@ -152,5 +151,3 @@ class UserSettingsFragment : BaseFragment() {
         }
     }
 }
-
-// Da li prilikom restore-a treba vratiti i slike i audio fajlovi?
