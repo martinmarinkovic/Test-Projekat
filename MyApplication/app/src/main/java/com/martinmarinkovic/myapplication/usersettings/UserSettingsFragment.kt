@@ -117,10 +117,6 @@ class UserSettingsFragment : BaseFragment() {
             if (task.isSuccessful) {
                 for (document in task.result!!) {
                     var note = document.toObject<Note>()
-                    note.images =
-                        empty
-                    note.audioFiles =
-                        empty
                     launch {
                         NoteDatabase(context!!).getNoteDao().addNote(note)
                     }

@@ -6,6 +6,7 @@ import android.app.AlertDialog
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
@@ -15,6 +16,7 @@ import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
+import android.widget.AdapterView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
@@ -25,10 +27,12 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.bumptech.glide.Glide
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -45,19 +49,22 @@ import com.theartofdev.edmodo.cropper.CropImage
 import kotlinx.android.synthetic.main.audio_recorder_layout.view.*
 import kotlinx.android.synthetic.main.custom_dialog_layout.view.*
 import kotlinx.android.synthetic.main.fragment_add_note.*
+import kotlinx.android.synthetic.main.fragment_image.view.*
+import kotlinx.android.synthetic.main.play_audio_layout.view.*
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
 
-class AddNoteFragment : BaseFragment() {
+class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
 
     private var firebaseStore: FirebaseStorage? = null
     private var storageReference: StorageReference? = null
     private var uid: String? = null
     private var note: Note? = null
     private val db = Firebase.firestore
+    private var ref = db.collection("users")
     private val TAKE_PHOTO_REQUEST: Int = 2
     private val PICK_PHOTO_REQUEST: Int = 1
     private var fileUri: Uri? = null
@@ -69,6 +76,7 @@ class AddNoteFragment : BaseFragment() {
     private val MAX_LENGTH = 10
     private var imageListToShow: ArrayList<String> = ArrayList()
     private var imageListToUpload: ArrayList<String> = ArrayList()
+    private var imageListFirebase: ArrayList<String> = ArrayList()
     private var noteId: String = ""
     private var audioFilesList: ArrayList<String> = ArrayList()
     private var allFilesList: ArrayList<String> = ArrayList()
@@ -96,6 +104,7 @@ class AddNoteFragment : BaseFragment() {
         storageReference = FirebaseStorage.getInstance().reference
         uid = FirebaseAuth.getInstance().currentUser?.uid
 
+
         arguments?.let {
             note = AddNoteFragmentArgs.fromBundle(
                 it
@@ -105,6 +114,7 @@ class AddNoteFragment : BaseFragment() {
             if (note?.id != null)
                 noteId = note?.id!!
             if(note?.images != null) {
+                getNoteImagesFromFirestore()
                 imageListToShow = note?.images!!
                 allFilesList.addAll(imageListToShow)
                 setImages(allFilesList)
@@ -115,7 +125,6 @@ class AddNoteFragment : BaseFragment() {
                 setImages(allFilesList)
             }
         }
-
 
         edit_text_title.doAfterTextChanged {
             isTextChange = true
@@ -145,7 +154,7 @@ class AddNoteFragment : BaseFragment() {
         launch {
 
             context?.let {
-                val mNote = Note(noteId, noteTitle, noteBody, imageListToShow, audioFilesList)
+                val mNote = Note(noteId, noteTitle, noteBody, allFilesList, audioFilesList)
 
                 if (note == null) {
                     noteId = getRandomString()
@@ -157,6 +166,7 @@ class AddNoteFragment : BaseFragment() {
                 } else {
                     //mNote.id = note!!.id
                     NoteDatabase(it).getNoteDao().updateNote(mNote)
+                    mNote.images = imageListFirebase
                     updateNote(mNote)
                     if (imageListToUpload.isNotEmpty())
                         uploadImage(mNote)
@@ -175,11 +185,11 @@ class AddNoteFragment : BaseFragment() {
         val igka =
             NoteImageAdapter(
                 activity!!,
-                list
+                list,
+                this
             )
         rv.adapter = igka
     }
-
 
     private fun saveNote(note: Note) {
         if (uid != null) {
@@ -220,10 +230,12 @@ class AddNoteFragment : BaseFragment() {
     }
 
     private fun addUploadRecordToDb(uri: String, note: Note){
+        imageListFirebase.add(uri)
+        note.images = imageListFirebase
         db.collection("users").document(uid!!).collection("notes").document(note.id!!)
             .set(note)
             .addOnSuccessListener { documentReference ->
-                //Toast.makeText(activity, "Saved to Firestore", Toast.LENGTH_LONG).show()
+                //Toast.makeText(activity, "Saved to Firestore   " + uri, Toast.LENGTH_LONG).show()
             }
             .addOnFailureListener { e ->
                 Toast.makeText(activity, "Error saving to Firestore", Toast.LENGTH_LONG).show()
@@ -438,7 +450,6 @@ class AddNoteFragment : BaseFragment() {
         return super.onOptionsItemSelected(item)
     }
 
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.menu, menu)
@@ -568,5 +579,84 @@ class AddNoteFragment : BaseFragment() {
                 ALLOWED_CHARACTERS[random.nextInt(
                     ALLOWED_CHARACTERS.length)])
         return sb.toString()
+    }
+
+    override fun onFileClick(position: Int) {
+
+        var path = allFilesList[position]
+        var length = allFilesList.size
+
+        if (path.contains(".mp3")) {
+            val recorderDialogView = LayoutInflater.from(context).inflate(
+                R.layout.play_audio_layout, null
+            )
+            val recorderDialogViewBuilder = AlertDialog.Builder(context).setView(recorderDialogView)
+            val recorderDialog = recorderDialogViewBuilder.show()
+            recorderDialog.window.setLayout(400, 400);
+            recorderDialogView.btn_play.setOnClickListener {
+                var mediaPlayer = MediaPlayer()
+                mediaPlayer.setDataSource(path)
+                mediaPlayer.prepare()
+                mediaPlayer.start()
+            }
+        } else {
+
+            val imageDialogView = LayoutInflater.from(context).inflate(
+                R.layout.fragment_image, null
+            )
+            Glide.with(imageDialogView.image_view.context)
+                .load(path)
+                .into(imageDialogView.image_view)
+            val imageDialogViewBuilder = AlertDialog.Builder(context).setView(imageDialogView)
+            val imageDialog = imageDialogViewBuilder.show()
+            imageDialogView.btn_delete.setOnClickListener{
+
+                allFilesList.removeAt(position)
+                setImages(allFilesList)
+                if (imageListFirebase.isNotEmpty()) {
+                    var imgToDelete: String = imageListFirebase[position]
+                    imageListFirebase.removeAt(position)
+                    //imageListToShow.remove(imgToDelete)
+                    deleteSpecificImageFromStorage(imgToDelete)
+                    if (imageListToUpload.isNotEmpty()){
+                        imageListToUpload.remove(imgToDelete)
+                        // remove(el) ne radi!!!
+                        // Srediti paralelno dodavanja i brisanje!
+                    }
+                }
+                imageDialog.dismiss()
+            }
+            imageDialogView.btn_close.setOnClickListener {
+                imageDialog.dismiss()
+            }
+        }
+    }
+
+    private fun deleteSpecificImageFromStorage(imgToDelete: String) {
+        val ref = storageReference?.child("images")?.child(uid!!)?.child(noteId)
+        ref?.listAll()?.addOnSuccessListener { result ->
+            for (fileRef in result.items) {
+                fileRef.downloadUrl.addOnCompleteListener {
+                    if (it.result == Uri.parse(imgToDelete))
+                        fileRef.delete()
+                }
+            }
+        }?.addOnFailureListener {
+            activity?.toast("Error: Delete Images From Storage!")
+        }
+    }
+
+    private fun getNoteImagesFromFirestore() {
+        ref.document(
+            uid!!).collection("notes").document(noteId).get().addOnSuccessListener { document  ->
+            var note = document.toObject<Note>()
+            if (note != null)
+                if (note.images!!.isNotEmpty())
+                    imageListFirebase.addAll(note?.images!!)
+            activity?.toast(imageListFirebase.toString())
+            //note.audioFiles =
+            } .addOnFailureListener {
+            activity?.toast("Error!")
+        }
     }
 }
