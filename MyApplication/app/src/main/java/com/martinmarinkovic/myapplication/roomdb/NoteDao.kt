@@ -8,7 +8,8 @@ interface NoteDao {
     @Insert
     suspend fun addNote(note: Note)
 
-    @Query("SELECT * FROM note ORDER BY id DESC")
+    //@Query("SELECT * FROM note ORDER BY id DESC")
+    @Query("SELECT * FROM note ORDER BY date DESC")
     suspend fun getAllNotes() : List<Note>
 
     @Insert

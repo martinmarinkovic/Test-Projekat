@@ -10,7 +10,7 @@ import androidx.room.TypeConverters
     entities = [Note::class],
     version = 1
 )
-@TypeConverters(Converters::class)
+@TypeConverters(Converters::class, TimestampConverter::class)
 abstract class NoteDatabase : RoomDatabase(){
 
     abstract fun getNoteDao() : NoteDao

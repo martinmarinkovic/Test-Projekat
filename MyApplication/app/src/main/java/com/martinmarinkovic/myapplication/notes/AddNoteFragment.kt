@@ -16,7 +16,6 @@ import android.view.*
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
-import androidx.core.net.toUri
 import androidx.core.widget.doAfterTextChanged
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -118,6 +117,8 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
                 allFilesList.addAll(audioFilesListRoomdb)
                 setImages(allFilesList)
             }
+
+            activity?.toast(note?.date.toString())
         }
 
         edit_text_title.doAfterTextChanged {
@@ -130,6 +131,7 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
     }
 
     private fun save() {
+        val date = Date().time
         val noteTitle = edit_text_title.text.toString().trim()
         val noteBody = edit_text_note.text.toString().trim()
 
@@ -148,7 +150,7 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
         launch {
 
             context?.let {
-                val mNote = Note(noteId, noteTitle, noteBody, imageListRoomdb, audioFilesListRoomdb)
+                val mNote = Note(noteId, noteTitle, noteBody, imageListRoomdb, audioFilesListRoomdb, date)
 
                 if (note == null) {
                     noteId = getRandomString()
@@ -766,8 +768,7 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
                 if (note.audioFiles!!.isNotEmpty())
                     audioFilesListFirebase.addAll(note?.audioFiles!!)
             }
-            activity?.toast(audioFilesListFirebase.toString())
-            } .addOnFailureListener {
+        } .addOnFailureListener {
             activity?.toast("Error!")
         }
     }
