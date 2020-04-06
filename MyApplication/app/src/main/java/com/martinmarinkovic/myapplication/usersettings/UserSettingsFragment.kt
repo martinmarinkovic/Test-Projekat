@@ -1,5 +1,6 @@
 package com.martinmarinkovic.myapplication.usersettings
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,6 +18,7 @@ import com.martinmarinkovic.myapplication.R
 import com.martinmarinkovic.myapplication.roomdb.User
 import com.martinmarinkovic.myapplication.helper.toast
 import com.martinmarinkovic.myapplication.login.SignInActivity
+import com.martinmarinkovic.myapplication.notes.AddNoteFragmentDirections
 import com.martinmarinkovic.myapplication.notes.BaseFragment
 import com.martinmarinkovic.myapplication.roomdb.Note
 import com.martinmarinkovic.myapplication.roomdb.NoteDatabase
@@ -60,18 +62,40 @@ class UserSettingsFragment : BaseFragment() {
         }
 
         btn_delete.setOnClickListener{
-            deleteUserFromFirestore()
+
+            AlertDialog.Builder(context).apply {
+                setTitle("Are you sure?")
+                setMessage("You cannot undo this operation")
+                setPositiveButton("Yes") { _, _ ->
+                    deleteUserFromFirestore()
+                    deleteAuthUser()
+                    launch {
+                        NoteDatabase(context).getNoteDao().deleteNote(note!!)
+                    }
+                }
+                setNegativeButton("No") { _, _ ->
+                }
+            }.create().show()
         }
     }
 
     private fun deleteImagesFromStorage(noteId: String) {
-        val ref = storageReference?.child("images")?.child(
-            uid!!)?.child(noteId)
+        val ref = storageReference?.child("users")?.child(uid!!)?.child("images")?.child(noteId)
         ref?.listAll()?.addOnSuccessListener { result ->
             for (fileRef in result.items)
                 fileRef.delete()
         }?.addOnFailureListener {
             activity?.toast("Error: Delete Images From Storage!")
+        }
+    }
+
+    private fun deleteAudioFilesFromStorage(noteId: String) {
+        val ref = storageReference?.child("users")?.child(uid!!)?.child("audio")?.child(noteId)
+        ref?.listAll()?.addOnSuccessListener { result ->
+            for (fileRef in result.items)
+                fileRef.delete()
+        }?.addOnFailureListener {
+            activity?.toast("Error: Delete Audio From Storage!")
         }
     }
 
@@ -84,13 +108,13 @@ class UserSettingsFragment : BaseFragment() {
                     ref.get().addOnSuccessListener {
                         ref.collection("notes").get().addOnCompleteListener { task ->
                             if (task.isSuccessful) {
-                                deleteAuthUser()
                                 for (document in task.result!!) {
                                     var note = document.toObject<Note>()
+                                    deleteImagesFromStorage(note.id!!)
+                                    deleteAudioFilesFromStorage(note.id!!)
                                     document.reference.delete()
                                     launch {
                                         NoteDatabase(context!!).getNoteDao().deleteNote(note)
-                                        deleteImagesFromStorage(note.id!!)
                                     }
                                 }
                             }

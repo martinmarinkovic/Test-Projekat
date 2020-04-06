@@ -13,4 +13,11 @@
         android:layout_height="match_parent">
     </Button>
 
+    <Button
+        android:id="@+id/btn_delete_audio"
+        android:background="@drawable/ic_delete"
+        android:layout_width="30sp"
+        android:layout_height="30sp"
+        ></Button>
+
 </RelativeLayout>

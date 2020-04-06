@@ -41,6 +41,7 @@ class NotesAdapter(private val notes: List<Note>) : RecyclerView.Adapter<NotesAd
                 .load(R.drawable.note_layout_image)
                 .into(holder.view.iv_image)
         }
+
         holder.view.setOnClickListener {
             val action =
                 NotesFragmentDirections.actionAddNote()
