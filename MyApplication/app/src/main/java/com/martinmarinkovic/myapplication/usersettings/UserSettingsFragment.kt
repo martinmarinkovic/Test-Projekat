@@ -34,7 +34,7 @@ private lateinit var auth: FirebaseAuth
 private val db = Firebase.firestore
 private var ref = db.collection("users")
 private var user: FirebaseUser? = null
-private var empty = ArrayList<String>()
+private var notes:ArrayList<Note> = ArrayList()
 
 class UserSettingsFragment : BaseFragment() {
 
@@ -63,19 +63,26 @@ class UserSettingsFragment : BaseFragment() {
 
         btn_delete.setOnClickListener{
 
+            getAllNotes()
             AlertDialog.Builder(context).apply {
                 setTitle("Are you sure?")
                 setMessage("You cannot undo this operation")
                 setPositiveButton("Yes") { _, _ ->
+                    deleteFiles(notes)
                     deleteUserFromFirestore()
                     deleteAuthUser()
-                    launch {
-                        NoteDatabase(context).getNoteDao().deleteNote(note!!)
-                    }
                 }
                 setNegativeButton("No") { _, _ ->
                 }
             }.create().show()
+        }
+    }
+
+    private fun deleteFiles(notes: ArrayList<Note>) {
+        for (note in notes) {
+            launch { NoteDatabase(context!!).getNoteDao().deleteNote(note) }
+            deleteImagesFromStorage(note.id!!)
+            deleteAudioFilesFromStorage(note.id!!)
         }
     }
 
@@ -109,13 +116,7 @@ class UserSettingsFragment : BaseFragment() {
                         ref.collection("notes").get().addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 for (document in task.result!!) {
-                                    var note = document.toObject<Note>()
-                                    deleteImagesFromStorage(note.id!!)
-                                    deleteAudioFilesFromStorage(note.id!!)
                                     document.reference.delete()
-                                    launch {
-                                        NoteDatabase(context!!).getNoteDao().deleteNote(note)
-                                    }
                                 }
                             }
                         }
@@ -132,6 +133,19 @@ class UserSettingsFragment : BaseFragment() {
         user?.reauthenticate(credential)?.addOnCompleteListener {
             signOut()
             user.delete()
+        }
+    }
+
+    private fun getAllNotes() {
+        ref.document(
+            uid!!).collection("notes").get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                for (document in task.result!!) {
+                    var note = document.toObject<Note>()
+                    notes.add(note)
+                }
+            } else
+                activity?.toast("Error!")
         }
     }
 

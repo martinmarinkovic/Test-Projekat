@@ -26,7 +26,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.*
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageMetadata
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.UploadTask
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -117,8 +120,6 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
                 allFilesList.addAll(audioFilesListRoomdb)
                 setImages(allFilesList)
             }
-
-            activity?.toast(note?.date.toString())
         }
 
         edit_text_title.doAfterTextChanged {
@@ -128,6 +129,7 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
         edit_text_note.doAfterTextChanged {
             isTextChange = true
         }
+
     }
 
     private fun save() {
@@ -162,7 +164,6 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
                     if(audioFilesListToUpload.isNotEmpty())
                         uploadAudioFile(mNote)
                 } else {
-                    //mNote.id = note!!.id
                     NoteDatabase(it).getNoteDao().updateNote(mNote)
                     mNote.images = imageListFirebase
                     mNote.audioFiles = audioFilesListFirebase
@@ -173,8 +174,7 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
                         uploadAudioFile(mNote)
                 }
 
-                val action =
-                    AddNoteFragmentDirections.actionSaveNote()
+                val action = AddNoteFragmentDirections.actionSaveNote()
                 view?.let { it1 -> Navigation.findNavController(it1).navigate(action) }
             }
         }
@@ -183,12 +183,7 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
     private fun setImages(list: ArrayList<String>){
         val sglm = StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL)
         rv.layoutManager = sglm
-        val igka =
-            NoteImageAdapter(
-                activity!!,
-                list,
-                this
-            )
+        val igka = NoteImageAdapter(activity!!, list, this)
         rv.adapter = igka
     }
 
@@ -227,8 +222,7 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
     }
 
     private fun updateNote(note: Note){
-        db.collection("users").document(uid!!).collection("notes").document(note.id!!)
-            .set(note)
+        db.collection("users").document(uid!!).collection("notes").document(note.id!!).set(note)
     }
 
     private fun addUploadRecordToDb(uri: String, note: Note, type: Int){
@@ -255,11 +249,7 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
                 val ref = storageReference?.child("users")?.child(uid!!)?.child("images")?.child(note.id!!)
                     ?.child(getRandomString() + ".jpg")
                 val uploadTask = ref?.putFile(imgUri!!)
-
-                // After uploading a file, you can get a URL to download the file by calling the getDownloadUrl() method on the StorageReference:
-
-                val urlTask =
-                    uploadTask?.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
+                val urlTask = uploadTask?.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
                         if (!task.isSuccessful) {
                             task.exception?.let {
                                 throw it
@@ -273,8 +263,7 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
                         } else {
                             // Handle failures
                         }
-                    }?.addOnFailureListener {
-                    }
+                    }?.addOnFailureListener {}
             } else {
                 Toast.makeText(activity, "Error Uploading Image", Toast.LENGTH_SHORT).show()
             }
@@ -293,11 +282,7 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
             val ref = storageReference?.child("users")?.child(uid!!)?.child("audio/")?.child(note?.id!!)
                 ?.child(getRandomString() + ".mp3")
             val uploadTask = ref?.putFile(file, metadata)
-
-            // After uploading a file, you can get a URL to download the file by calling the getDownloadUrl() method on the StorageReference:
-
-            val urlTask =
-                uploadTask?.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
+            val urlTask = uploadTask?.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
                     if (!task.isSuccessful) {
                         task.exception?.let {
                             throw it
@@ -311,23 +296,7 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
                     } else {
                         // Handle failures
                     }
-                }?.addOnFailureListener {
-                }
-
-
-           /* var uploadTask = storageReference?.child("audio/")?.child(uid!!)?.child(note?.id!!)
-                ?.child(getRandomString() + ".mp3")?.putFile(file, metadata)
-
-            uploadTask?.addOnFailureListener {
-
-            }?.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val downloadUri = uploadTask.result.
-                    addUploadRecordToDb(downloadUri.toString(), note!!)
-                } else {
-                    // Handle failures
-                }
-            }*/
+                }?.addOnFailureListener {}
         }
     }
 
@@ -431,14 +400,24 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
     }
 
     private fun checkInputs(noteTitle: String, noteBody: String): Boolean{
-        if (noteTitle.isEmpty()) {
+        if (noteTitle.isEmpty())
             return false
+
+        if (noteBody.isEmpty())
+            return false
+
+        return true
+    }
+
+    private fun checkFileChanges() : Boolean {
+        if (imageListToUpload.isNotEmpty()) {
+            return true
         }
 
-        if (noteBody.isEmpty()) {
-            return false
-        }
-        return true
+        if (audioFilesListToUpload.isNotEmpty())
+            return true
+
+        return false
     }
 
     private fun onBackPressed() {
@@ -446,7 +425,7 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
         val noteTitle = edit_text_title.text.toString().trim()
         val noteBody = edit_text_note.text.toString().trim()
 
-        if (checkInputs(noteTitle, noteBody) and isTextChange) {
+        if (checkInputs(noteTitle, noteBody) and isTextChange || checkFileChanges()) {
             AlertDialog.Builder(context).apply {
                 setTitle("Save your changes or discard them?")
                 setPositiveButton("Save") { _, _ ->
@@ -455,6 +434,17 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
                 setNeutralButton("Cancel") { _, _ ->
                 }
                 setNegativeButton("Discard") { _, _ ->
+
+                    for (audio in audioFilesListToUpload) {
+                        val file = File(audio)
+                        file?.delete()
+                    }
+
+                    for (img in imageListToUpload){
+                        val file = File(img)
+                        file?.delete()
+                    }
+
                     val action =
                         AddNoteFragmentDirections.actionSaveNote()
                     view?.let { it1 -> Navigation.findNavController(it1).navigate(action) }
@@ -501,7 +491,7 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
             mAlertDialog.dismiss()
         }
         mDialogView.btn_recorder.setOnClickListener {
-            askAudioRecoroderPermission()
+            askAudioRecorderPermission()
             mAlertDialog.dismiss()
         }
     }
@@ -541,7 +531,7 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
         }
     }
 
-    private fun askAudioRecoroderPermission(){
+    private fun askAudioRecorderPermission(){
         Dexter.withActivity(activity).withPermissions(
             Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE
         ).withListener(object : MultiplePermissionsListener {
@@ -604,7 +594,6 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
              }
          }
      }
-
 
      @SuppressLint("RestrictedApi", "SetTextI18n")
      @TargetApi(Build.VERSION_CODES.N)
@@ -679,7 +668,6 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
                         // Srediti paralelno dodavanja i brisanje!
                     }
                 }
-
                 recorderDialog.dismiss()
             }
         } else {
@@ -699,8 +687,6 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
                 setImages(allFilesList)
 
                 if (imageListFirebase.isNotEmpty()) {
-                    //imageListFirebase.removeAt(position)
-                    //imageListRoomdb.remove(imgToDelete)
                     deleteImageFromList(imgToDelete)
 
                     if (imageListToUpload.isNotEmpty()){
