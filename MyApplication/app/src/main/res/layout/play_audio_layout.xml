@@ -6,6 +6,7 @@
     android:background="@color/colorPrimaryDark">
 
     <Button
+        android:layout_margin="20sp"
         android:layout_centerInParent="true"
         android:id="@+id/btn_play"
         android:background="@drawable/ic_play"

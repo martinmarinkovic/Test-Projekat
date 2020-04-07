@@ -36,7 +36,7 @@ class NavigationActivity : AppCompatActivity() , NavigationView.OnNavigationItem
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_notes, R.id.nav_wallpaper, R.id.nav_lock_screen, R.id.nav_user_settings, R.id.nav_developer_page, R.id.nav_bug_report
+                R.id.nav_notes, /*R.id.addNoteFragment,*/ R.id.nav_wallpaper, R.id.nav_lock_screen, R.id.nav_user_settings, R.id.nav_developer_page, R.id.nav_bug_report
             ), drawerLayout
         )
 

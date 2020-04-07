@@ -47,17 +47,6 @@ class LockScreenActivity : AppCompatActivity() {
     private var mFirstPin = ""
     private var mTryCount: Int = 0
 
-
-/*    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-
-        if(keyCode == KeyEvent.KEYCODE_HOME)
-        {
-            //The Code Want to Perform.
-        }
-
-        return true
-    }*/
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.window.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY)

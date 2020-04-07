@@ -99,7 +99,6 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
         storageReference = FirebaseStorage.getInstance().reference
         uid = FirebaseAuth.getInstance().currentUser?.uid
 
-
         arguments?.let {
             note = AddNoteFragmentArgs.fromBundle(
                 it
@@ -440,11 +439,6 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
                         file?.delete()
                     }
 
-                    for (img in imageListToUpload){
-                        val file = File(img)
-                        file?.delete()
-                    }
-
                     val action =
                         AddNoteFragmentDirections.actionSaveNote()
                     view?.let { it1 -> Navigation.findNavController(it1).navigate(action) }
@@ -464,6 +458,7 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
             setTitle("Are you sure?")
             setMessage("You cannot undo this operation")
             setPositiveButton("Yes") { _, _ ->
+                deleteNotesFromInternalStorage()
                 deleteNoteFirestore(note!!)
                 launch {
                     NoteDatabase(context).getNoteDao().deleteNote(note!!)
@@ -647,7 +642,7 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
             )
             val recorderDialogViewBuilder = AlertDialog.Builder(context).setView(recorderDialogView)
             val recorderDialog = recorderDialogViewBuilder.show()
-            recorderDialog.window.setLayout(400, 400);
+            recorderDialog.window.setLayout(500, 500);
             recorderDialogView.btn_play.setOnClickListener {
                 var mediaPlayer = MediaPlayer()
                 mediaPlayer.setDataSource(path)
@@ -722,6 +717,8 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
             if (img == imgToDelete)
                 index = i
         if (index != null) {
+            val deleteFromInternalStorage = File(audioFilesListRoomdb[index])
+            deleteFromInternalStorage?.delete()
             audioFilesListRoomdb.removeAt(index)
             var file = audioFilesListFirebase[index]
             audioFilesListFirebase.removeAt(index)
@@ -756,6 +753,13 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
             }
         } .addOnFailureListener {
             activity?.toast("Error!")
+        }
+    }
+
+    private fun deleteNotesFromInternalStorage() {
+        for (audio in audioFilesListRoomdb) {
+            val file = File(audio)
+            file?.delete()
         }
     }
 }
