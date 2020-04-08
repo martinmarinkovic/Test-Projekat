@@ -2,16 +2,14 @@ package com.martinmarinkovic.myapplication.lockscreen
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
-import android.app.ActionBar
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.PixelFormat
-import android.os.Build
 import android.os.Bundle
-import android.view.KeyEvent
 import android.view.View
 import android.view.WindowManager
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.martinmarinkovic.myapplication.PinLockView
@@ -49,7 +47,6 @@ class LockScreenActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.window.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY)
         setContentView(R.layout.activity_lock_screen)
         mTextAttempts = findViewById<View>(R.id.attempts) as TextView
         mTextTitle = findViewById<View>(R.id.title) as TextView

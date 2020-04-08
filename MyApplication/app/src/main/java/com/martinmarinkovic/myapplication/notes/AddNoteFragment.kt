@@ -20,6 +20,12 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.doAfterTextChanged
 import androidx.navigation.Navigation
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.gms.tasks.Continuation
@@ -89,21 +95,16 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+
+       /*val toolbar: Toolbar? = (activity as NavigationActivity?)?.toolbar
+        toolbar?.setNavigationOnClickListener {
+            onBackPressed()
+        }*/
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_add_note, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-/*        val toolbar: Toolbar = view.findViewById(R.id.toolbar)
-        toolbar.setNavigationIcon(R.drawable.ic_gallery) // need to set the icon here to have a navigation icon. You can simple create an vector image by "Vector Asset" and using here
-        toolbar.setNavigationOnClickListener {
-            activity?.toast("ASAsaSAsaSAs")
-        }*/
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -431,15 +432,6 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
             return true
 
         return false
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        val toolbar: Toolbar? = (activity as NavigationActivity?)?.toolbar
-        toolbar?.setNavigationOnClickListener {
-            onBackPressed()
-        }
     }
 
     private fun onBackPressed() {
