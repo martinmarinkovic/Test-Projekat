@@ -652,7 +652,7 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
             )
             val recorderDialogViewBuilder = AlertDialog.Builder(context).setView(recorderDialogView)
             val recorderDialog = recorderDialogViewBuilder.show()
-            recorderDialog.window.setLayout(500, 500);
+            recorderDialog.window.setLayout(800, 800);
             recorderDialogView.btn_play.setOnClickListener {
                 var mediaPlayer = MediaPlayer()
                 mediaPlayer.setDataSource(path)
