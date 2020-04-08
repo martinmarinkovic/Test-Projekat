@@ -16,6 +16,8 @@ import android.view.*
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.doAfterTextChanged
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -34,11 +36,13 @@ import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import com.martinmarinkovic.myapplication.NavigationActivity
 import com.martinmarinkovic.myapplication.R
 import com.martinmarinkovic.myapplication.helper.toast
 import com.martinmarinkovic.myapplication.roomdb.Note
 import com.martinmarinkovic.myapplication.roomdb.NoteDatabase
 import com.theartofdev.edmodo.cropper.CropImage
+import kotlinx.android.synthetic.main.app_bar_navigation.*
 import kotlinx.android.synthetic.main.audio_recorder_layout.view.*
 import kotlinx.android.synthetic.main.custom_dialog_layout.view.*
 import kotlinx.android.synthetic.main.fragment_add_note.*
@@ -90,6 +94,16 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_add_note, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+/*        val toolbar: Toolbar = view.findViewById(R.id.toolbar)
+        toolbar.setNavigationIcon(R.drawable.ic_gallery) // need to set the icon here to have a navigation icon. You can simple create an vector image by "Vector Asset" and using here
+        toolbar.setNavigationOnClickListener {
+            activity?.toast("ASAsaSAsaSAs")
+        }*/
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -417,6 +431,15 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
             return true
 
         return false
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        val toolbar: Toolbar? = (activity as NavigationActivity?)?.toolbar
+        toolbar?.setNavigationOnClickListener {
+            onBackPressed()
+        }
     }
 
     private fun onBackPressed() {

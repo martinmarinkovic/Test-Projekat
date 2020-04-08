@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import com.martinmarinkovic.myapplication.helper.toast
 import com.martinmarinkovic.myapplication.roomdb.User
 import kotlinx.android.synthetic.main.activity_navigation.*
 import kotlinx.android.synthetic.main.nav_header_navigation.*
@@ -36,7 +37,7 @@ class NavigationActivity : AppCompatActivity() , NavigationView.OnNavigationItem
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_notes, R.id.addNoteFragment, R.id.nav_wallpaper, R.id.nav_lock_screen, R.id.nav_user_settings, R.id.nav_developer_page, R.id.nav_bug_report
+                R.id.nav_notes, /*R.id.addNoteFragment,*/ R.id.nav_wallpaper, R.id.nav_lock_screen, R.id.nav_user_settings, R.id.nav_developer_page, R.id.nav_bug_report
             ), drawerLayout
         )
 
