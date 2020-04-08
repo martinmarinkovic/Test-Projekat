@@ -86,12 +86,12 @@ class LockScreenFragment : Fragment() {
     fun check(){
         if (!LockScreen.getInstance().isActive()) {
             btn_enable_lock_screen.text = "Enable Lock Screen"
-            btn_set_password.isEnabled = true
+            btn_set_password.isEnabled = false
             btn_set_password.setTextColor(Color.GRAY)
         } else {
             btn_enable_lock_screen.text = ("Disable Lock Screen")
             btn_set_password.setTextColor(Color.WHITE)
-            btn_set_password.isEnabled = false
+            btn_set_password.isEnabled = true
         }
     }
 }
