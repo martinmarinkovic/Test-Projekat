@@ -146,6 +146,8 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
         val date = Date().time
         val noteTitle = edit_text_title.text.toString().trim()
         val noteBody = edit_text_note.text.toString().trim()
+        imageListRoomdb.addAll(imageListToUpload)
+        audioFilesListRoomdb.addAll(audioFilesListToUpload)
 
         if (noteTitle.isEmpty()) {
             edit_text_title.error = "title required"
@@ -252,8 +254,7 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
     }
 
     private fun uploadImage(note: Note){
-        var list = imageListToUpload
-        for (img in list) {
+        for (img in imageListToUpload) {
             imgUri = Uri.parse(img)
             if (imgUri != null) {
                 val ref = storageReference?.child("users")?.child(uid!!)?.child("images")?.child(note.id!!)
@@ -281,9 +282,7 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
     }
 
     private fun uploadAudioFile(note: Note){
-
-        var list = audioFilesListToUpload
-        for (path in list) {
+        for (path in audioFilesListToUpload) {
             var file = Uri.fromFile(File(path))
             var metadata = StorageMetadata.Builder()
                 .setContentType("audio/mpeg")
@@ -400,7 +399,6 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
             if (resultCode === RESULT_OK) {
                 val resultUri = result.uri
                 image = resultUri.toString()
-                imageListRoomdb.add(image!!)
                 imageListToUpload.add(image!!)
                 allFilesList.add(image!!)
                 setImages(allFilesList)
@@ -623,7 +621,6 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
     }
 
     private fun saveAudioFile(){
-        audioFilesListRoomdb.add(output.toString())
         audioFilesListToUpload.add(output.toString())
         allFilesList.add(output.toString())
         setImages(allFilesList)
@@ -668,14 +665,12 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
                 allFilesList.removeAt(position)
                 setImages(allFilesList)
 
-                if (audioFilesListFirebase.isNotEmpty()) {
+                if (audioFilesListFirebase.isNotEmpty())
                     deleteAudioFileFromList(audioFileToDelete)
-
-                    if (audioFilesListToUpload.isNotEmpty()){
-                        audioFilesListToUpload.remove(audioFileToDelete)
-                        // Srediti paralelno dodavanja i brisanje!
-                    }
+                else if (audioFilesListToUpload.isNotEmpty()){
+                    audioFilesListToUpload.remove(audioFileToDelete)
                 }
+
                 recorderDialog.dismiss()
             }
         } else {
@@ -694,14 +689,12 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
                 allFilesList.removeAt(position)
                 setImages(allFilesList)
 
-                if (imageListFirebase.isNotEmpty()) {
+                if (imageListFirebase.isNotEmpty())
                     deleteImageFromList(imgToDelete)
-
-                    if (imageListToUpload.isNotEmpty()){
-                        imageListToUpload.remove(imgToDelete)
-                        // Srediti paralelno dodavanja i brisanje!
-                    }
+                else if (imageListToUpload.isNotEmpty()){
+                    imageListToUpload.remove(imgToDelete)
                 }
+
                 imageDialog.dismiss()
             }
             imageDialogView.btn_close.setOnClickListener {
@@ -721,7 +714,6 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
             imageListFirebase.removeAt(index)
             deleteSpecificFileFromStorage(file, "images")
         }
-
     }
 
     private fun deleteAudioFileFromList(imgToDelete: String) {
@@ -737,7 +729,6 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
             audioFilesListFirebase.removeAt(index)
             deleteSpecificFileFromStorage(file, "audio")
         }
-
     }
 
     private fun deleteSpecificFileFromStorage(fileToDelete: String, fileType: String) {
