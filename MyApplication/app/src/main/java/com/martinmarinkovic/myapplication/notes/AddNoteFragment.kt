@@ -16,15 +16,10 @@ import android.view.*
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.doAfterTextChanged
 import androidx.navigation.Navigation
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.Glide
@@ -48,7 +43,6 @@ import com.martinmarinkovic.myapplication.helper.toast
 import com.martinmarinkovic.myapplication.roomdb.Note
 import com.martinmarinkovic.myapplication.roomdb.NoteDatabase
 import com.theartofdev.edmodo.cropper.CropImage
-import kotlinx.android.synthetic.main.app_bar_navigation.*
 import kotlinx.android.synthetic.main.audio_recorder_layout.view.*
 import kotlinx.android.synthetic.main.custom_dialog_layout.view.*
 import kotlinx.android.synthetic.main.fragment_add_note.*
@@ -95,12 +89,12 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
-
-       /*val toolbar: Toolbar? = (activity as NavigationActivity?)?.toolbar
-        toolbar?.setNavigationOnClickListener {
-            onBackPressed()
-        }*/
     }
+
+    /*override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        (activity as AppCompatActivity?)?.getSupportActionBar()?.setDisplayHomeAsUpEnabled(false)
+    }*/
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setHasOptionsMenu(true)
@@ -137,10 +131,12 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
         }
 
         edit_text_title.doAfterTextChanged {
+            (activity as AppCompatActivity?)?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
             isTextChange = true
         }
 
         edit_text_note.doAfterTextChanged {
+            (activity as AppCompatActivity?)?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
             isTextChange = true
         }
 
@@ -408,6 +404,7 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
                 imageListToUpload.add(image!!)
                 allFilesList.add(image!!)
                 setImages(allFilesList)
+                (activity as AppCompatActivity?)?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
             } else if (resultCode === CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE)
                 Toast.makeText(activity, "Error:$result.error", Toast.LENGTH_SHORT).show()
         }
@@ -630,6 +627,7 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
         audioFilesListToUpload.add(output.toString())
         allFilesList.add(output.toString())
         setImages(allFilesList)
+        (activity as AppCompatActivity?)?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }
 
     companion object {
