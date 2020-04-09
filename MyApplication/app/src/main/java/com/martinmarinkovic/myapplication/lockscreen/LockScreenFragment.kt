@@ -5,14 +5,15 @@ import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import com.google.android.material.snackbar.Snackbar
 import com.martinmarinkovic.myapplication.R
 import com.martinmarinkovic.myapplication.helper.toast
 import kotlinx.android.synthetic.main.fragment_lock_screen.*
@@ -22,6 +23,7 @@ class LockScreenFragment : Fragment() {
     private val PACKAGE_NAME = "com.martinmarinkovic.myapplication"
     private val PIN_SAVED = "pinEnabled"
     private val REQUEST_CODE = 123
+    private val ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 5469
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -39,7 +41,11 @@ class LockScreenFragment : Fragment() {
         btn_enable_lock_screen.setOnClickListener{
             LockScreen.getInstance().init(context!!, true)
             if (!LockScreen.getInstance().isActive()){
-                LockScreen.getInstance().active()
+                if (!Settings.canDrawOverlays(context)) {
+                    requestPermission()
+                } else if (Settings.canDrawOverlays(context)) {
+                    LockScreen.getInstance().active()
+                }
                 btn_enable_lock_screen.text = "Disable Lock Screen"
                 btn_set_password.isEnabled = true
                 btn_set_password.setTextColor(Color.WHITE)
@@ -69,6 +75,15 @@ class LockScreenFragment : Fragment() {
         }
     }
 
+    private fun requestPermission() {
+        if (Build.VERSION.SDK_INT >= 26) {
+            if (Settings.canDrawOverlays(context)) {
+                val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$PACKAGE_NAME"))
+                startActivityForResult(intent, ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE)
+            }
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
@@ -80,10 +95,16 @@ class LockScreenFragment : Fragment() {
                     editor.apply()
                     activity?.toast(getString(R.string.pin_enabled))
             }
+            ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE->
+                if (Build.VERSION.SDK_INT >= 26){
+                    if (Settings.canDrawOverlays(context)) {
+                        LockScreen.getInstance().active()
+                    }
+                }
         }
     }
 
-    fun check(){
+    private fun check(){
         if (!LockScreen.getInstance().isActive()) {
             btn_enable_lock_screen.text = "Enable Lock Screen"
             btn_set_password.isEnabled = false

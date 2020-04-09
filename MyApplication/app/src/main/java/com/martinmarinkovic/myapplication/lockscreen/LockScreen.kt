@@ -36,7 +36,7 @@ class LockScreen {
     @RequiresApi(Build.VERSION_CODES.O)
     fun active() {
         if (disableHomeButton!!) {
-            showSettingAccesability()
+            //showSettingAccesability()
         }
         if (context != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -60,12 +60,12 @@ class LockScreen {
         }
     }
 
-    private fun showSettingAccesability() {
+    /*private fun showSettingAccesability() {
         if (!isMyServiceRunning(LockWindowAccessibilityService::class.java)) {
             val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
             context!!.startActivity(intent)
         }
-    }
+    }*/
 
     @SuppressWarnings("deprecation")
     private fun isMyServiceRunning(serviceClass: Class<*>): Boolean {

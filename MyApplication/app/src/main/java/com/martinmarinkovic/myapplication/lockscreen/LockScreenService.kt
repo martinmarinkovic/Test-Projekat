@@ -101,7 +101,7 @@ class LockScreenService : Service() {
         val notification: Notification = Notification.Builder(this, NOTIFICATION_CHANNEL_ID)
             .setContentTitle("Lock Screen")
             .setContentText("Running")
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.icon_profile)
             .setContentIntent(pendingIntent)
             .build()
 

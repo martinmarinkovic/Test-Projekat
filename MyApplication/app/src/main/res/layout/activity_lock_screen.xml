@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
+    android:id="@+id/test"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -17,19 +18,22 @@
         android:src="@drawable/icon_profile" />
 
     <TextView
+        android:layout_marginLeft="20sp"
+        android:layout_marginRight="20sp"
         android:id="@+id/title"
-        android:layout_width="256dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/profile_image"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="36dp"
         android:fontFamily="sans-serif-thin"
         android:gravity="center"
-        android:maxLines="1"
+        android:maxLines="2"
         android:textStyle="bold"
         android:text="Enter Password"
+        android:textAlignment="center"
         android:textColor="@color/white"
-        android:textSize="34sp" />
+        android:textSize="30sp" />
 
     <com.martinmarinkovic.myapplication.lockscreen.IndicatorDots
         android:id="@+id/indicator_dots"
