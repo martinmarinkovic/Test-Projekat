@@ -77,10 +77,8 @@ class LockScreenFragment : Fragment() {
 
     private fun requestPermission() {
         if (Build.VERSION.SDK_INT >= 26) {
-            if (Settings.canDrawOverlays(context)) {
-                val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$PACKAGE_NAME"))
-                startActivityForResult(intent, ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE)
-            }
+            val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$PACKAGE_NAME"))
+            startActivityForResult(intent, ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE)
         }
     }
 

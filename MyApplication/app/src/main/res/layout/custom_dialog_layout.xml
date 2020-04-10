@@ -32,10 +32,12 @@
             android:layout_margin="20dp"
             android:id="@+id/btn_gallery1"
             android:background="@drawable/ic_photo_camera"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="60sp"
+            android:layout_height="50sp" />
 
         <TextView
+            android:textAlignment="center"
+            android:layout_centerHorizontal="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -44,8 +46,9 @@
             android:layout_toRightOf="@+id/btn_gallery1"
             android:text="@string/camera_photo"
             android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"></TextView>
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"></TextView>
     </RelativeLayout>
 
     <RelativeLayout
@@ -60,10 +63,12 @@
             android:layout_margin="20dp"
             android:id="@+id/btn_camera1"
             android:background="@drawable/ic_gallery"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="60sp"
+            android:layout_height="50sp"  />
 
         <TextView
+            android:textAlignment="center"
+            android:layout_centerHorizontal="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -72,8 +77,9 @@
             android:layout_toRightOf="@+id/btn_camera1"
             android:text="@string/gallery_photo"
             android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"></TextView>
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"></TextView>
     </RelativeLayout>
 
     <RelativeLayout
@@ -88,10 +94,12 @@
             android:layout_margin="20dp"
             android:id="@+id/btn_recorder1"
             android:background="@drawable/ic_audiotrack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="60sp"
+            android:layout_height="50sp"  />
 
         <TextView
+            android:textAlignment="center"
+            android:layout_centerHorizontal="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -100,8 +108,9 @@
             android:layout_toRightOf="@+id/btn_recorder1"
             android:text="@string/audio_recording"
             android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"></TextView>
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"></TextView>
     </RelativeLayout>
 
 </LinearLayout>
