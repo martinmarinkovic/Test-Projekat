@@ -28,16 +28,16 @@ class LockScreen {
         this.context = context
     }
 
-    fun init(context: Context, disableHomeButton: Boolean){
+/*    fun init(context: Context, disableHomeButton: Boolean){
         this.context = context
         this.disableHomeButton = disableHomeButton
-    }
+    }*/
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun active() {
-        if (disableHomeButton!!) {
+        /*if (disableHomeButton!!) {
             //showSettingAccesability()
-        }
+        }*/
         if (context != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 context!!.startForegroundService(Intent(context, LockScreenService::class.java))

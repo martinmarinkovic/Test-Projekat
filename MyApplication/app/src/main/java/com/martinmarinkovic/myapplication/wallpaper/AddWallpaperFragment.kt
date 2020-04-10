@@ -45,8 +45,6 @@ class AddWallpaperFragment : Fragment() {
     private var _CurrentView = 0
     private var _ViewsCount = 0
     private var _AddWallpaperFragment: AddWallpaperFragment? = null
-    private var bitmap: Bitmap? = null
-    private var canvas: Canvas? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setHasOptionsMenu(true)

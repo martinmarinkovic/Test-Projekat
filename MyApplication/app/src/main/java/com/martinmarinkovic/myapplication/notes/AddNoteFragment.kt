@@ -3,24 +3,24 @@ package com.martinmarinkovic.myapplication.notes
 import android.Manifest
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
-import android.content.ContentValues
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.os.StrictMode
 import android.provider.MediaStore
 import android.view.*
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.doAfterTextChanged
 import androidx.navigation.Navigation
-import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.gms.tasks.Continuation
@@ -37,7 +37,6 @@ import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
-import com.martinmarinkovic.myapplication.NavigationActivity
 import com.martinmarinkovic.myapplication.R
 import com.martinmarinkovic.myapplication.helper.toast
 import com.martinmarinkovic.myapplication.roomdb.Note
@@ -50,6 +49,7 @@ import kotlinx.android.synthetic.main.fragment_image.view.*
 import kotlinx.android.synthetic.main.play_audio_layout.view.*
 import kotlinx.coroutines.launch
 import java.io.File
+import java.io.FileInputStream
 import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
@@ -80,9 +80,11 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
     private var noteId: String = ""
     private var allFilesList: ArrayList<String> = ArrayList()
     private var isTextChange: Boolean = false
+    private var path: File? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 onBackPressed()
@@ -226,7 +228,7 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
                         deleteAudioFilesFromStorage(note.id!!)
                         //Toast.makeText(activity, "Success!", Toast.LENGTH_SHORT).show()
                     }
-                    .addOnFailureListener { e ->
+                    .addOnFailureListener {
                         Toast.makeText(activity, "Fail!", Toast.LENGTH_SHORT).show()
                     }
             }
@@ -335,12 +337,21 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
     }
 
     private fun launchCamera() {
-        val values = ContentValues(1)
-        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpg")
-        fileUri = activity!!.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+
+        val builder: StrictMode.VmPolicy.Builder = StrictMode.VmPolicy.Builder()
+        StrictMode.setVmPolicy(builder.build())
+
+        val root = Environment.getExternalStorageDirectory().toString()
+        val myDir = File("$root/MyApp/camera")
+        myDir.mkdirs()
+        path = File(myDir.toString() + "/" + getRandomString() + ".jpg")
+
+        /* val values = ContentValues(1)
+         values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpg")
+         fileUri = activity!!.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)*/
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         if(intent.resolveActivity(activity!!.packageManager) != null) {
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri)
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(path))
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
             startActivityForResult(intent, TAKE_PHOTO_REQUEST)
         }
@@ -380,8 +391,8 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == RESULT_OK && requestCode == TAKE_PHOTO_REQUEST) {
-            image = fileUri.toString()
-            CropImage.activity(fileUri)
+            image = path?.absolutePath.toString()
+            CropImage.activity(Uri.fromFile(path))
                 .setMinCropWindowSize(500, 500)
                 .setAspectRatio(1,1)
                 .start(context!!,this)
@@ -398,6 +409,8 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
             var result = CropImage.getActivityResult(data)
             if (resultCode === RESULT_OK) {
                 val resultUri = result.uri
+                val deleteFromInternalStorage = File(image)
+                deleteFromInternalStorage?.delete()
                 image = resultUri.toString()
                 imageListToUpload.add(image!!)
                 allFilesList.add(image!!)
@@ -444,10 +457,7 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
                 }
                 setNegativeButton("Discard") { _, _ ->
 
-                    for (audio in audioFilesListToUpload) {
-                        val file = File(audio)
-                        file?.delete()
-                    }
+                    deleteAudioFilesFromInternalStorage(audioFilesListToUpload)
 
                     val action =
                         AddNoteFragmentDirections.actionSaveNote()
@@ -468,7 +478,7 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
             setTitle("Are you sure?")
             setMessage("You cannot undo this operation")
             setPositiveButton("Yes") { _, _ ->
-                deleteNotesFromInternalStorage()
+                deleteAudioFilesFromInternalStorage(audioFilesListRoomdb)
                 deleteNoteFirestore(note!!)
                 launch {
                     NoteDatabase(context).getNoteDao().deleteNote(note!!)
@@ -760,8 +770,8 @@ class AddNoteFragment : BaseFragment(), NoteImageAdapter.OnFileCLickListener {
         }
     }
 
-    private fun deleteNotesFromInternalStorage() {
-        for (audio in audioFilesListRoomdb) {
+    private fun deleteAudioFilesFromInternalStorage(list: ArrayList<String>) {
+        for (audio in list) {
             val file = File(audio)
             file?.delete()
         }

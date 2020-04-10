@@ -34,12 +34,12 @@ class LockScreenFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        LockScreen.getInstance().init(context!!, true)
+        LockScreen.getInstance().init(context!!)
         check()
 
 
         btn_enable_lock_screen.setOnClickListener{
-            LockScreen.getInstance().init(context!!, true)
+            LockScreen.getInstance().init(context!!)
             if (!LockScreen.getInstance().isActive()){
                 if (!Settings.canDrawOverlays(context)) {
                     requestPermission()
