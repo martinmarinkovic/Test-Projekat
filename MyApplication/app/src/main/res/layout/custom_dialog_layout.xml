@@ -46,7 +46,7 @@
             android:layout_toRightOf="@+id/btn_gallery1"
             android:text="@string/camera_photo"
             android:textColor="@color/white"
-            android:textSize="16sp"
+            android:textSize="18sp"
             android:textStyle="bold"
             android:gravity="center_horizontal"></TextView>
     </RelativeLayout>
@@ -77,7 +77,7 @@
             android:layout_toRightOf="@+id/btn_camera1"
             android:text="@string/gallery_photo"
             android:textColor="@color/white"
-            android:textSize="16sp"
+            android:textSize="18sp"
             android:textStyle="bold"
             android:gravity="center_horizontal"></TextView>
     </RelativeLayout>
@@ -108,7 +108,7 @@
             android:layout_toRightOf="@+id/btn_recorder1"
             android:text="@string/audio_recording"
             android:textColor="@color/white"
-            android:textSize="16sp"
+            android:textSize="18sp"
             android:textStyle="bold"
             android:gravity="center_horizontal"></TextView>
     </RelativeLayout>
