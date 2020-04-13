@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide
 import com.martinmarinkovic.myapplication.R
 import com.martinmarinkovic.myapplication.helper.toast
 import com.martinmarinkovic.myapplication.wallpaper.sticker.StickerImage
+import com.theartofdev.edmodo.cropper.CropImage
 import kotlinx.android.synthetic.main.fragment_add_wallpaper.*
 import java.io.File
 import java.io.FileOutputStream
@@ -45,6 +46,7 @@ class AddWallpaperFragment : Fragment() {
     private var _CurrentView = 0
     private var _ViewsCount = 0
     private var _AddWallpaperFragment: AddWallpaperFragment? = null
+    private var imageUri: Uri? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setHasOptionsMenu(true)
@@ -68,7 +70,7 @@ class AddWallpaperFragment : Fragment() {
             val image = AddWallpaperFragmentArgs.fromBundle(
                 it
             ).string
-            val imageUri = Uri.parse(image)
+            imageUri = Uri.parse(image)
             Glide.with(activity!!)
                 .load(imageUri)
                 .into(image_view )
@@ -176,7 +178,7 @@ class AddWallpaperFragment : Fragment() {
         if (bgDrawable != null)
             bgDrawable.draw(canvas)
         else
-            canvas.drawColor(Color.WHITE)
+            canvas.drawColor(Color.BLACK)
         view.draw(canvas)
         return returnedBitmap
     }
@@ -193,7 +195,7 @@ class AddWallpaperFragment : Fragment() {
         if (file.exists()) file.delete()
         try {
             val out = FileOutputStream(file)
-            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)
+            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
             out.flush()
             out.close()
         } catch (e: Exception) {

@@ -118,7 +118,13 @@ class PinLockAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.ViewH
     private fun configureDeleteButtonHolder(holder: DeleteViewHolder?) {
         if (holder != null) {
             if (mCustomizationOptionsBundle!!.isShowDeleteButton && mPinLength > 0) {
-                holder.mDeleteButton.setVisibility(View.VISIBLE)
+                holder.mDeleteButton.visibility = View.VISIBLE
+
+                val params = LinearLayout.LayoutParams(
+                    mCustomizationOptionsBundle!!.deleteButtonSize,
+                    mCustomizationOptionsBundle!!.deleteButtonSize
+                )
+                holder.mDeleteButton.layoutParams = params
 
                 /*if (mCustomizationOptionsBundle!!.deleteButtonDrawable != null) {
                     holder.mButtonImage.setImageDrawable(mCustomizationOptionsBundle!!.deleteButtonDrawable)

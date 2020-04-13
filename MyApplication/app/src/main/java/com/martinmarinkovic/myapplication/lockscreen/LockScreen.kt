@@ -33,7 +33,6 @@ class LockScreen {
         this.disableHomeButton = disableHomeButton
     }*/
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun active() {
         /*if (disableHomeButton!!) {
             //showSettingAccesability()
@@ -47,7 +46,7 @@ class LockScreen {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     fun deactivate() {
         context!!.stopService(Intent(context, LockScreenService::class.java))
     }

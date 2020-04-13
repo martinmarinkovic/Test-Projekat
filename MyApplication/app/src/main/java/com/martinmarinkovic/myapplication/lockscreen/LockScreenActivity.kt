@@ -15,12 +15,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.martinmarinkovic.myapplication.PinLockView
 import com.martinmarinkovic.myapplication.R
-import com.martinmarinkovic.myapplication.helper.toast
 import com.martinmarinkovic.myapplication.lockscreen.Utils.Companion.sha256
 
 
@@ -74,15 +72,26 @@ class LockScreenActivity : AppCompatActivity() {
     }
 
     private fun showFloat() {
-        myParams = WindowManager.LayoutParams(
-            screen_width,
-            screen_height,
-            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
-            WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED
-                    or WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-                    or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-            PixelFormat.TRANSLUCENT
-        )
+        if (Build.VERSION.SDK_INT >= 26){
+            myParams = WindowManager.LayoutParams(
+                screen_width,
+                screen_height,
+                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+                WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED
+                        or WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+                        or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                PixelFormat.TRANSLUCENT
+        )} else {
+            myParams = WindowManager.LayoutParams(
+                screen_width,
+                screen_height,
+                WindowManager.LayoutParams.TYPE_PHONE,
+                WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED
+                        or WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+                        or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                PixelFormat.TRANSLUCENT
+        )}
+
         myParams!!.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
         if (Build.VERSION.SDK_INT >= 23) {
             if (Settings.canDrawOverlays(context)) {
@@ -104,12 +113,11 @@ class LockScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lock_screen)
 
-
         initializeView()
         getScreenSize()
         showFloat()
 
-        mTextAttempts = mView?.findViewById<View>(R.id.attempts) as TextView
+        //mTextAttempts = mView?.findViewById<View>(R.id.attempts) as TextView
         mTextTitle = mView?.findViewById<View>(R.id.title) as TextView
         mIndicatorDots = mView?.findViewById<View>(R.id.indicator_dots) as IndicatorDots
         mSetPin = intent.getBooleanExtra(EXTRA_SET_PIN, false)
@@ -211,7 +219,7 @@ class LockScreenActivity : AppCompatActivity() {
     }
 
     private fun changeLayoutForSetPin() {
-        mTextAttempts!!.visibility = View.GONE
+        //mTextAttempts!!.visibility = View.GONE
         mTextTitle!!.text = getString(R.string.pinlock_settitle)
     }
 

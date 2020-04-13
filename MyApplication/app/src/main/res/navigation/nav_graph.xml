@@ -24,7 +24,7 @@
             android:id="@+id/actionSaveNote"
             app:destination="@id/nav_notes"
             app:popUpTo="@id/nav_notes"
-            app:popUpToInclusive="false"/>
+            app:popUpToInclusive="true"/>
         <argument
             android:name="Note"
             android:defaultValue="@null"

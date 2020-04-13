@@ -113,14 +113,14 @@ class WallpaperFragment : Fragment() {
             imageCamera = path?.absolutePath.toString()
             CropImage.activity(Uri.fromFile(path))
                 .setMinCropWindowSize(screen_width/2, screen_height/2)
-                .setAspectRatio(9,19)
+                .setAspectRatio(9,16)
                 .start(context!!,this)
         }
         if (resultCode == Activity.RESULT_OK && requestCode == PICK_PHOTO_REQUEST) {
             fileUri = data?.data
             CropImage.activity(fileUri)
                 .setMinCropWindowSize(screen_width/2, screen_height/2)
-                .setAspectRatio(9,19)
+                .setAspectRatio(9,16)
                 .start(context!!,this)
         }
         if (requestCode === CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
@@ -149,7 +149,7 @@ class WallpaperFragment : Fragment() {
     }
 
     companion object {
-        private val ALLOWED_CHARACTERS = "0123456789qwertyuiopasdfghjklzxcvbnm"
+        private const val ALLOWED_CHARACTERS = "0123456789qwertyuiopasdfghjklzxcvbnm"
     }
 
     private fun getRandomString(): String {

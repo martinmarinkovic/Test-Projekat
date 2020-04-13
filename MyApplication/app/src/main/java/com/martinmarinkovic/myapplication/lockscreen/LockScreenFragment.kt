@@ -30,7 +30,7 @@ class LockScreenFragment : Fragment() {
             return inflater.inflate(R.layout.fragment_lock_screen, container, false)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -76,7 +76,7 @@ class LockScreenFragment : Fragment() {
     }
 
     private fun requestPermission() {
-        if (Build.VERSION.SDK_INT >= 26) {
+        if (Build.VERSION.SDK_INT >= 23) {
             val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$PACKAGE_NAME"))
             startActivityForResult(intent, ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE)
         }
@@ -94,7 +94,7 @@ class LockScreenFragment : Fragment() {
                     activity?.toast(getString(R.string.pin_enabled))
             }
             ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE->
-                if (Build.VERSION.SDK_INT >= 26){
+                if (Build.VERSION.SDK_INT >= 23){
                     if (Settings.canDrawOverlays(context)) {
                         LockScreen.getInstance().active()
                     }
