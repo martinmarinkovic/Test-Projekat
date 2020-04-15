@@ -53,7 +53,7 @@
         <Button
             android:layout_margin="10sp"
             android:layout_weight="1"
-            android:background="@drawable/rounded_button"
+            android:background="@drawable/wallpaper_btn"
             android:text="@string/set_wallpaper"
             android:padding="20sp"
             android:textSize="18sp"
@@ -70,7 +70,7 @@
         <Button
             android:layout_margin="10sp"
             android:layout_weight="1"
-            android:background="@drawable/rounded_button"
+            android:background="@drawable/wallpaper_btn"
             android:text="@string/add_sticker"
             android:padding="20sp"
             android:textSize="18sp"
